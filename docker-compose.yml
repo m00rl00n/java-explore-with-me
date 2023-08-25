@@ -6,11 +6,11 @@ services:
     container_name: stats-server
     ports:
       - "9090:9090"
-    depends_on:
-      - stats-db
     environment:
       - STATS_SERVER_URL=http://server:9090
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/postgres
+    networks:
+      - ewm-network
 
   stats-db:
     image: postgres:15
@@ -21,6 +21,8 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: iamroot
+    networks:
+      - ewm-network
 
   ewm-service:
     build: ewm-main-service
@@ -28,12 +30,11 @@ services:
     container_name: ewm-service
     ports:
       - "8080:8080"
-    depends_on:
-      - stats-server
-      - ewm-db
     environment:
       - EWM_SERVICE_URL=http://server:8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/postgres
+    networks:
+      - ewm-network
 
   ewm-db:
     image: postgres:15
@@ -44,3 +45,9 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: iamroot
+    networks:
+      - ewm-network
+
+networks:
+  ewm-network:
+    driver: bridge
