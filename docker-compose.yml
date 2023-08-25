@@ -16,7 +16,7 @@ services:
     image: postgres:15
     container_name: stats-db
     ports:
-      - "6541:5432"
+      - "5432:5432"
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -33,13 +33,13 @@ services:
       - ewm-db
     environment:
       - EWM_SERVICE_URL=http://server:8080
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5433/postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/postgres
 
   ewm-db:
     image: postgres:15
     container_name: ewm-db
     ports:
-      - "6541:5432"
+      - "5433:5432"
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
