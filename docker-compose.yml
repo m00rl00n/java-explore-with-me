@@ -1,46 +1,57 @@
 version: '3.1'
 services:
   stats-server:
-    build: stats-server/server
-    image: stats-server
+    build: ewm-stats-service/server
     container_name: stats-server
     ports:
       - "9090:9090"
     depends_on:
       - stats-db
     environment:
-      - STATS_SERVER_URL=http://server:9090
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
 
   stats-db:
-    image: postgres:15
+    image: postgres:14-alpine
+    healthcheck:
+      test: "pg_isready --username=postgres && psql --username=postgres --list"
+      timeout: 10s
+      retries: 20
+    volumes:
+      - /var/lib/postgresql/data/
     container_name: stats-db
     ports:
       - "6541:5432"
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: iamroot
+      - POSTGRES_DB=ewm-stats
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
 
   ewm-service:
-    build: ewm-service
-    image: ewm-service
-    container_name: ewm-service
+    build: ewm-main-service
+    container_name: main-service
     ports:
       - "8080:8080"
     depends_on:
-      - stats-server
       - ewm-db
     environment:
-      - EWM_SERVICE_URL=http://server:8080
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5433/postgres
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-main
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
 
   ewm-db:
-    image: postgres:15
-    container_name: ewm-db
+    image: postgres:14-alpine
+    healthcheck:
+      test: "pg_isready --username=postgres && psql --username=postgres --list"
+      timeout: 10s
+      retries: 20
+    volumes:
+      - /var/lib/postgresql/data/
+    container_name: db_main
     ports:
-      - "6542:5433"
+      - "6542:5432"
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: iamroot
+      - POSTGRES_DB=ewm-main
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root

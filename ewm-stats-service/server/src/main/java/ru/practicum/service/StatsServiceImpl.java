@@ -1,7 +1,6 @@
 package ru.practicum.service;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,38 +19,45 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
+@Transactional(readOnly = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class StatsServiceImpl implements StatsService {
 
-    private final StatsRepository repository;
+    final StatsRepository statsRepository;
 
-    @Override
+    @Autowired
+    public StatsServiceImpl(StatsRepository statsRepository) {
+        this.statsRepository = statsRepository;
+    }
+
+    @Transactional
     public StatsHitDto save(StatsHitDto hitDto) {
-        StatsHit hit = repository.save(Mapper.toHit(hitDto));
+        StatsHit hit = statsRepository.save(Mapper.toHit(hitDto));
+        log.info("Новый запрос.....");
         return Mapper.toHitDto(hit);
     }
 
-    @Override
     public List<StatsResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         List<StatsResponse> statsList;
         if (uris == null) {
             if (unique) {
-                statsList = repository.getUniqueStatsWithUriIsNull(start, end);
+                statsList = statsRepository.getUniqueStatsWithUriIsNull(start, end);
             } else {
-                statsList = repository.getStatsWithUriIsNull(start, end);
+                statsList = statsRepository.getStatsWithUriIsNull(start, end);
             }
         } else {
             if (unique) {
-                statsList = repository.getUniqueStats(uris, start, end);
+                statsList = statsRepository.getUniqueStats(uris, start, end);
             } else {
-                statsList = repository.getStats(uris, start, end);
+                statsList = statsRepository.getStats(uris, start, end);
             }
         }
+        log.info("Загрузка статистики.....");
 
         return statsList.stream()
                 .sorted(Comparator.comparing(StatsResponse::getHits).reversed())
                 .map(Mapper::toStatsDto)
                 .collect(Collectors.toList());
     }
-
 }
