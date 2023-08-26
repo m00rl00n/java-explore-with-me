@@ -14,10 +14,6 @@ services:
 
   stats-db:
     image: postgres:14-alpine
-    healthcheck:
-      test: "pg_isready --username=postgres && psql --username=postgres --list"
-      timeout: 10s
-      retries: 20
     volumes:
       - /var/lib/postgresql/data/
     container_name: stats-db
@@ -42,10 +38,6 @@ services:
 
   ewm-db:
     image: postgres:14-alpine
-    healthcheck:
-      test: "pg_isready --username=postgres && psql --username=postgres --list"
-      timeout: 10s
-      retries: 20
     volumes:
       - /var/lib/postgresql/data/
     container_name: db_main
