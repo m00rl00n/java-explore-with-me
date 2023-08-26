@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>ewm-main-service</artifactId>
+    <artifactId>ewm-service</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -62,10 +62,6 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
             <version>1.7.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot</artifactId>
         </dependency>
     </dependencies>
 
