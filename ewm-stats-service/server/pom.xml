@@ -70,7 +70,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>ru.practicum.StatisticService</mainClass>
+                    <mainClass>ru.practicum.ServerApplication</mainClass>
                     <layout>JAR</layout>
                 </configuration>
             </plugin>
