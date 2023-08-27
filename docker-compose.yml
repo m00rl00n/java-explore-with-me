@@ -41,6 +41,6 @@ services:
     ports:
       - "6432:5432"
     environment:
-      - POSTGRES_DB=main_service
+      - POSTGRES_DB=ewm-main-service
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=iamroot
