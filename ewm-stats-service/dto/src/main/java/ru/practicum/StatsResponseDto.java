@@ -1,4 +1,4 @@
-package model;
+package ru.practicum;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -14,3 +14,4 @@ public class StatsResponseDto {
     String uri;
     Integer hits;
 }
+

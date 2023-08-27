@@ -1,7 +1,7 @@
+package ru.practicum;
+
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import model.StatsHitDto;
-import model.StatsResponseDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
