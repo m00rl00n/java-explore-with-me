@@ -13,9 +13,9 @@ import java.util.List;
 @Repository
 public interface StatsRepository extends JpaRepository<StatsHit, Integer> {
 
-    @Query(value = "SELECT new ru.practicum.model.Stats(" +
+    @Query(value = "SELECT new ru.practicum.model.StatsResponse(" +
             "hit.app as app, hit.uri as uri, COUNT(DISTINCT hit.ip) as counter) " +
-            "FROM EndpointHit hit " +
+            "FROM StatsHit hit " +
             "WHERE hit.timestamp between :start AND :end " +
             "GROUP BY hit.app, hit.uri " +
             "ORDER BY counter DESC")
@@ -24,9 +24,9 @@ public interface StatsRepository extends JpaRepository<StatsHit, Integer> {
             @Param("end") LocalDateTime end
     );
 
-    @Query(value = "SELECT new ru.practicum.model.Stats(" +
+    @Query(value = "SELECT new ru.practicum.model.StatsResponse(" +
             "hit.app as app, hit.uri as uri, COUNT(hit.ip) as counter) " +
-            "FROM EndpointHit hit " +
+            "FROM StatsHit hit " +
             "WHERE hit.timestamp between :start AND :end " +
             "GROUP BY hit.app, hit.uri " +
             "ORDER BY counter DESC")
@@ -35,9 +35,9 @@ public interface StatsRepository extends JpaRepository<StatsHit, Integer> {
             @Param("end") LocalDateTime end
     );
 
-    @Query(value = "SELECT new ru.practicum.model.Stats(" +
+    @Query(value = "SELECT new ru.practicum.model.StatsResponse(" +
             "hit.app as app, hit.uri as uri, COUNT(DISTINCT hit.ip) as counter) " +
-            "FROM EndpointHit hit " +
+            "FROM StatsHit hit " +
             "WHERE hit.timestamp between :start AND :end " +
             "AND uri in ( :uris) " +
             "GROUP BY hit.app, hit.uri " +
