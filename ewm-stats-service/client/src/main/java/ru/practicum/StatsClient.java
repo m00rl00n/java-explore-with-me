@@ -1,41 +1,47 @@
 package ru.practicum;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-
+import java.util.Objects;
 
 @Service
-public class StatsClient extends BaseClient {
-    @Autowired
-    public StatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
-        super(
-                builder
-                        .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
-                        .requestFactory(HttpComponentsClientHttpRequestFactory::new)
-                        .build()
-        );
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class StatsClient {
+
+    final WebClient webClient;
+
+    public StatsClient(@Value("${stats-server.url}") String connectionURL) {
+        webClient = WebClient.create(connectionURL);
     }
 
-    public ResponseEntity<Object> create(StatsHitDto statsHitDto) {
-        return post("/hit", statsHitDto);
+    public StatsHitDto saveHit(StatsHitDto statsHitDto) {
+        return webClient.post()
+                .uri("/hit")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .body(Mono.just(statsHitDto), StatsHitDto.class)
+                .retrieve()
+                .bodyToMono(StatsHitDto.class)
+                .block();
     }
 
-    public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        Map<String, Object> parameters = Map.of(
-                "start", start.toString(),
-                "end", end.toString(),
-                "uris", uris,
-                "unique", unique
-        );
-        return get("/stats?start={start}&end={end}&uris={uris}&unique={unique}", parameters);
+    public List<StatsResponseDto> getStats(String start, String end, List<String> uris, Boolean unique) {
+        return List.of(Objects.requireNonNull(webClient.get()
+                .uri(uriWithParams -> uriWithParams.path("/stats")
+                        .queryParam("start", start)
+                        .queryParam("end", end)
+                        .queryParam("uris", uris)
+                        .queryParam("unique", unique)
+                        .build())
+                .retrieve()
+                .bodyToMono(StatsResponseDto[].class)
+                .block()));
     }
 }

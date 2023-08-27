@@ -1,9 +1,6 @@
 package ru.practicum;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
@@ -15,4 +12,3 @@ public class StatsResponseDto {
     String uri;
     Integer hits;
 }
-
