@@ -1,62 +1,55 @@
 package ru.practicum.service;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.practicum.mapper.Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.StatsHitDto;
 import ru.practicum.StatsResponseDto;
-import ru.practicum.model.StatsHit;
-import ru.practicum.model.StatsResponse;
+import ru.practicum.mapper.Mapper;
 import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
-@Transactional(readOnly = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@Slf4j
 public class StatsServiceImpl implements StatsService {
 
     final StatsRepository statsRepository;
 
-    @Autowired
-    public StatsServiceImpl(StatsRepository statsRepository) {
-        this.statsRepository = statsRepository;
-    }
-
     @Transactional
-    public StatsHitDto save(StatsHitDto hitDto) {
-        StatsHit hit = statsRepository.save(Mapper.toHit(hitDto));
+    public StatsHitDto save(StatsHitDto statsHitDto) {
         log.info("Новый запрос.....");
-        return Mapper.toHitDto(hit);
+        return Mapper.toEndpointHitDto(statsRepository.save(Mapper.toEndpointHit(statsHitDto)));
     }
 
-    public List<StatsResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        List<StatsResponse> statsList;
-        if (uris == null) {
-            if (unique) {
-                statsList = statsRepository.getUniqueStatsWithUriIsNull(start, end);
-            } else {
-                statsList = statsRepository.getStatsWithUriIsNull(start, end);
+    public List<StatsResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        if (unique) {
+            if (uris != null) {
+                log.info("Загрузка статистики.....");
+                return statsRepository.findUniqueStats(start, end, uris).stream()
+                        .map(Mapper::toStatsDto)
+                        .collect(Collectors.toList());
             }
-        } else {
-            if (unique) {
-                statsList = statsRepository.getUniqueStats(uris, start, end);
-            } else {
-                statsList = statsRepository.getStats(uris, start, end);
-            }
+            log.info("Загрузка статистики.....");
+            return statsRepository.findUniqueStats(start, end).stream()
+                    .map(Mapper::toStatsDto)
+                    .collect(Collectors.toList());
+        }
+        if (uris != null) {
+            log.info("Загрузка статистики.....");
+            return statsRepository.findStats(start, end, uris).stream()
+                    .map(Mapper::toStatsDto)
+                    .collect(Collectors.toList());
         }
         log.info("Загрузка статистики.....");
-
-        return statsList.stream()
-                .sorted(Comparator.comparing(StatsResponse::getHits).reversed())
+        return statsRepository.findStats(start, end).stream()
                 .map(Mapper::toStatsDto)
                 .collect(Collectors.toList());
     }

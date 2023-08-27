@@ -1,21 +1,21 @@
 package ru.practicum;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.time.LocalDateTime;
 
-import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
+import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StatsHitDto {
-    Integer id;
+
+    @NotBlank
     String app;
+    @NotBlank
     String uri;
     String ip;
-    @JsonFormat(shape = STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime timestamp;
+    String timestamp;
 }

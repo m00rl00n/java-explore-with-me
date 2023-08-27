@@ -3,6 +3,7 @@ package ru.practicum.controller;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import ru.practicum.service.StatsServiceImpl;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Service
 @RestController

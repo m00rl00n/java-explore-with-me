@@ -2,7 +2,7 @@ version: '3.8'
 services:
   stats-server:
     build: ewm-stats-service/stats-server
-    container_name: stats_container
+    container_name: ewm-stats-service
     ports:
       - "9090:9090"
     depends_on:
@@ -23,9 +23,9 @@ services:
       - POSTGRES_PASSWORD=iamroot
 
   main-service:
-    build: ./ewm-main-service
-    image: ewm-main-service
-    container_name: ewm-main-service
+    build: ./main-service
+    image: main-service-image
+    container_name: main_service_container
     ports:
       - "8080:8080"
     depends_on:
@@ -41,6 +41,6 @@ services:
     ports:
       - "6432:5432"
     environment:
-      - POSTGRES_DB=ewm-main-service
+      - POSTGRES_DB=main_service
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=iamroot
