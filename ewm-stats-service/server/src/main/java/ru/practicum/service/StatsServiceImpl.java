@@ -25,7 +25,7 @@ public class StatsServiceImpl implements StatsService {
 
     @Transactional
     public StatsHitDto save(StatsHitDto statsHitDto) {
-        log.info("Новый запрос.....");
+        log.info("Новый запрос......");
         return Mapper.toEndpointHitDto(statsRepository.save(Mapper.toEndpointHit(statsHitDto)));
     }
 
