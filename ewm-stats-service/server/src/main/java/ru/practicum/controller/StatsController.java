@@ -1,20 +1,19 @@
 package ru.practicum.controller;
 
+import ru.practicum.service.StatsServiceImpl;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import model.StatsHitDto;
+import model.StatsResponseDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.StatsHitDto;
-import ru.practicum.StatsResponseDto;
-import ru.practicum.service.StatsServiceImpl;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 @Service
 @RestController

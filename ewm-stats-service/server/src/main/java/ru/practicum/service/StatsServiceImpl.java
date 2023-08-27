@@ -1,15 +1,16 @@
 package ru.practicum.service;
 
+import ru.practicum.mapper.Mapper;
+import ru.practicum.repository.StatsRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import model.StatsHitDto;
+import model.StatsResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.StatsHitDto;
-import ru.practicum.StatsResponseDto;
-import ru.practicum.mapper.Mapper;
-import ru.practicum.repository.StatsRepository;
+import ru.practicum.service.StatsService;
 
 import java.time.LocalDateTime;
 import java.util.List;

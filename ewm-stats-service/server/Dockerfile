@@ -1,3 +1,3 @@
-FROM amazoncorretto:11
-COPY target/*.jar stats-server.jar
-ENTRYPOINT ["java","-jar","/ewm-stats-service.jar"]
+FROM amazoncorretto:11-alpine-jdk
+COPY target/*.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
