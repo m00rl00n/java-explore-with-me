@@ -3,14 +3,15 @@ package ru.practicum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Data
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StatsDto {
 
     String app;
     String uri;
-    Integer hits;
+    Long hits;
 }

@@ -8,9 +8,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @Entity
 @Table(name = "hits")
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 public class EndpointHit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
 
     @Column(nullable = false)
     String app;
