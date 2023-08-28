@@ -3,14 +3,20 @@ package ru.practicum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Data
+import javax.validation.constraints.NotBlank;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StatsResponseDto {
+public class EndpointHitDto {
 
+    @NotBlank
     String app;
+    @NotBlank
     String uri;
-    Integer hits;
+    String ip;
+    String timestamp;
 }

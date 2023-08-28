@@ -1,17 +1,17 @@
 package ru.practicum.model;
 
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
-@EqualsAndHashCode(of = "id")
 @NoArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StatsResponse {
+public class Stats {
 
     String app;
     String uri;
-    Integer hits;
+    Long hits;
 }

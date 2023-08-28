@@ -22,17 +22,17 @@ public class StatsClient {
         webClient = WebClient.create(connectionURL);
     }
 
-    public StatsHitDto saveHit(StatsHitDto statsHitDto) {
+    public EndpointHitDto saveHit(EndpointHitDto endpointHitDto) {
         return webClient.post()
                 .uri("/hit")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(Mono.just(statsHitDto), StatsHitDto.class)
+                .body(Mono.just(endpointHitDto), EndpointHitDto.class)
                 .retrieve()
-                .bodyToMono(StatsHitDto.class)
+                .bodyToMono(EndpointHitDto.class)
                 .block();
     }
 
-    public List<StatsResponseDto> getStats(String start, String end, List<String> uris, Boolean unique) {
+    public List<StatsDto> getStats(String start, String end, List<String> uris, Boolean unique) {
         return List.of(Objects.requireNonNull(webClient.get()
                 .uri(uriWithParams -> uriWithParams.path("/stats")
                         .queryParam("start", start)
@@ -41,7 +41,7 @@ public class StatsClient {
                         .queryParam("unique", unique)
                         .build())
                 .retrieve()
-                .bodyToMono(StatsResponseDto[].class)
+                .bodyToMono(StatsDto[].class)
                 .block()));
     }
 }
