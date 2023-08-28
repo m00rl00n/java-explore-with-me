@@ -1,22 +1,16 @@
-package ru.practicum;
+package ru.practicum.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EndpointHitDto {
+public class StatsResponse {
 
-    @NotBlank
     String app;
-    @NotBlank
     String uri;
-    String ip;
-    String timestamp;
+    Long hits;
 }

@@ -10,13 +10,12 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "hits")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class EndpointHit {
+public class StatsHit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
