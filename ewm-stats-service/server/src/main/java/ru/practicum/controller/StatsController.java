@@ -3,12 +3,12 @@ package ru.practicum.controller;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import model.StatsHitDto;
-import model.StatsResponseDto;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.StatsHitDto;
+import ru.practicum.StatsResponseDto;
 import ru.practicum.service.StatsServiceImpl;
 
 import javax.validation.Valid;
@@ -34,7 +34,7 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public StatsHitDto addEndpointHit(@RequestBody @Valid StatsHitDto statsHitDto) {
+    public StatsHitDto save(@RequestBody @Valid StatsHitDto statsHitDto) {
         return statsServiceImpl.save(statsHitDto);
     }
 }

@@ -8,11 +8,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode(of = "id")
 @Table(name = "hits")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StatsHit {

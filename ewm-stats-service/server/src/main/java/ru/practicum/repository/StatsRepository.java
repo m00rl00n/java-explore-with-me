@@ -1,11 +1,11 @@
 package ru.practicum.repository;
 
-import org.springframework.data.repository.query.Param;
-import ru.practicum.model.StatsHit;
-import ru.practicum.model.StatsResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import ru.practicum.model.StatsHit;
+import ru.practicum.model.StatsResponse;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,9 +48,9 @@ public interface StatsRepository extends JpaRepository<StatsHit, Integer> {
             @Param("uris") List<String> uris
     );
 
-    @Query(value = "SELECT new ru.practicum.model.Stats(" +
+    @Query(value = "SELECT new ru.practicum.model.StatsResponse(" +
             "hit.app as app, hit.uri as uri, COUNT(hit.ip) as counter) " +
-            "FROM EndpointHit hit " +
+            "FROM StatsHit hit " +
             "WHERE hit.timestamp between :start AND :end " +
             "AND uri in ( :uris) " +
             "GROUP BY hit.app, hit.uri " +

@@ -4,53 +4,59 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import model.StatsHitDto;
-import model.StatsResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.StatsHitDto;
+import ru.practicum.StatsResponseDto;
 import ru.practicum.mapper.Mapper;
+import ru.practicum.model.StatsResponse;
 import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
-@Slf4j
 public class StatsServiceImpl implements StatsService {
 
     final StatsRepository statsRepository;
 
     @Transactional
     public StatsHitDto save(StatsHitDto statsHitDto) {
-        log.info("Новый запрос.......");
-        return Mapper.toEndpointHitDto(statsRepository.save(Mapper.toEndpointHit(statsHitDto)));
+        log.info("Сохранение статистики....");
+        return Mapper.toHitDto(statsRepository.save(Mapper.toHit(statsHitDto)));
     }
 
     public List<StatsResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        List<StatsResponseDto> statsResponseDtos = new ArrayList<>();
+        log.info("Получение статистики.....");
         if (unique) {
+            List<StatsResponse> statsList;
             if (uris != null) {
-                log.info("Загрузка статистики.....");
-                return statsRepository.findUniqueStats(start, end, uris).stream()
-                        .map(Mapper::toStatsDto)
-                        .collect(Collectors.toList());
+                statsList = statsRepository.findUniqueStats(start, end, uris);
+            } else {
+                statsList = statsRepository.findUniqueStats(start, end);
             }
-            log.info("Загрузка статистики.....");
-            return statsRepository.findUniqueStats(start, end).stream()
-                    .map(Mapper::toStatsDto)
-                    .collect(Collectors.toList());
+
+            for (StatsResponse stats : statsList) {
+                statsResponseDtos.add(Mapper.toStatsDto(stats));
+            }
+        } else {
+            List<StatsResponse> statsList;
+            if (uris != null) {
+                statsList = statsRepository.findStats(start, end, uris);
+            } else {
+                statsList = statsRepository.findStats(start, end);
+            }
+
+            for (StatsResponse stats : statsList) {
+                statsResponseDtos.add(Mapper.toStatsDto(stats));
+            }
         }
-        if (uris != null) {
-            log.info("Загрузка статистики.....");
-            return statsRepository.findStats(start, end, uris).stream()
-                    .map(Mapper::toStatsDto)
-                    .collect(Collectors.toList());
-        }
-        log.info("Загрузка статистики.....");
-        return statsRepository.findStats(start, end).stream()
-                .map(Mapper::toStatsDto)
-                .collect(Collectors.toList());
+
+        return statsResponseDtos;
     }
 }
