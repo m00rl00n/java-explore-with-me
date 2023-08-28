@@ -8,3 +8,4 @@ DROP TABLE IF EXISTS hits;
      ip       VARCHAR(15) NOT NULL,
      datetime TIMESTAMP WITHOUT TIME ZONE,
      CONSTRAINT pk_hit PRIMARY KEY (id)
+     );

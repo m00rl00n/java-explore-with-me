@@ -15,4 +15,5 @@ public class ExceptionHandler {
     public Map<String, String> handleWrongData(final BadRequestException e) {
         log.error("Ошибка: " + e.getMessage());
         return Map.of("error", e.getMessage());
-    }}
+    }
+}
