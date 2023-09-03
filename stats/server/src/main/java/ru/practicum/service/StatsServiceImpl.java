@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.StatsHitDto;
 import ru.practicum.StatsResponseDto;
+import ru.practicum.exception.BadRequestException;
 import ru.practicum.mapper.Mapper;
 import ru.practicum.model.StatsHit;
 import ru.practicum.model.StatsResponse;
@@ -34,8 +35,13 @@ public class StatsServiceImpl implements StatsService {
     }
 
     public List<StatsResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        List<StatsResponse> statsList;
         log.info("Получение статистики.....");
+        if (start.isAfter(end)) {
+            throw new BadRequestException("Дата и время начала не должны быть позже даты и времени конца");
+        }
+
+        List<StatsResponse> statsList;
+
         if (unique) {
             if (uris != null) {
                 statsList = statsRepository.findUniqueStats(start, end, uris);

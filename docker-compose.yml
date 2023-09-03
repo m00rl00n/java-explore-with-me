@@ -30,6 +30,7 @@ services:
       - "8080:8080"
     depends_on:
       - db-main
+      - stats-server
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db-main:5432/main_service
       - POSTGRES_USER=postgres
