@@ -6,8 +6,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.EndpointHitDto;
-import ru.practicum.StatsDto;
+import ru.practicum.StatsHitDto;
+import ru.practicum.StatsResponseDto;
 import ru.practicum.mapper.Mapper;
 import ru.practicum.model.StatsHit;
 import ru.practicum.model.StatsResponse;
@@ -26,14 +26,14 @@ public class StatsServiceImpl implements StatsService {
     final StatsRepository statsRepository;
 
     @Transactional
-    public EndpointHitDto save(EndpointHitDto statsHitDto) {
+    public StatsHitDto save(StatsHitDto statsHitDto) {
         log.info("Сохранение статистики....");
         StatsHit statsHit = Mapper.toHit(statsHitDto);
         StatsHit savedStatsHit = statsRepository.save(statsHit);
         return Mapper.toHitDto(savedStatsHit);
     }
 
-    public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+    public List<StatsResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         List<StatsResponse> statsList;
         log.info("Получение статистики.....");
         if (unique) {
@@ -50,11 +50,11 @@ public class StatsServiceImpl implements StatsService {
             }
         }
 
-        List<StatsDto> statsResponseDtoList = new ArrayList<>();
+        List<StatsResponseDto> statsDtoList = new ArrayList<>();
         for (StatsResponse stats : statsList) {
-            statsResponseDtoList.add(Mapper.toStatsDto(stats));
+            statsDtoList.add(Mapper.toStatsDto(stats));
         }
 
-        return statsResponseDtoList;
+        return statsDtoList;
     }
 }

@@ -1,7 +1,7 @@
 package ru.practicum.mapper;
 
-import ru.practicum.EndpointHitDto;
-import ru.practicum.StatsDto;
+import ru.practicum.StatsHitDto;
+import ru.practicum.StatsResponseDto;
 import ru.practicum.model.StatsHit;
 import ru.practicum.model.StatsResponse;
 
@@ -10,8 +10,8 @@ import java.time.format.DateTimeFormatter;
 
 public class Mapper {
 
-    public static EndpointHitDto toHitDto(StatsHit statsHit) {
-        EndpointHitDto statsHitDto = new EndpointHitDto();
+    public static StatsHitDto toHitDto(StatsHit statsHit) {
+        StatsHitDto statsHitDto = new StatsHitDto();
         statsHitDto.setIp(statsHit.getIp());
         statsHitDto.setApp(statsHit.getApp());
         statsHitDto.setUri(statsHit.getUri());
@@ -19,7 +19,7 @@ public class Mapper {
         return statsHitDto;
     }
 
-    public static StatsHit toHit(EndpointHitDto statsHitDto) {
+    public static StatsHit toHit(StatsHitDto statsHitDto) {
         StatsHit statsHit = new StatsHit();
         statsHit.setIp(statsHitDto.getIp());
         statsHit.setApp(statsHitDto.getApp());
@@ -28,11 +28,11 @@ public class Mapper {
         return statsHit;
     }
 
-    public static StatsDto toStatsDto(StatsResponse stats) {
-        StatsDto statsResponseDto = new StatsDto();
-        statsResponseDto.setApp(stats.getApp());
-        statsResponseDto.setHits(stats.getHits());
-        statsResponseDto.setUri(stats.getUri());
-        return statsResponseDto;
+    public static StatsResponseDto toStatsDto(StatsResponse stats) {
+        StatsResponseDto statsDto = new StatsResponseDto();
+        statsDto.setApp(stats.getApp());
+        statsDto.setHits(stats.getHits());
+        statsDto.setUri(stats.getUri());
+        return statsDto;
     }
 }

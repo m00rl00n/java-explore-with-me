@@ -7,8 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.EndpointHitDto;
-import ru.practicum.StatsDto;
+import ru.practicum.StatsHitDto;
+import ru.practicum.StatsResponseDto;
 import ru.practicum.service.StatsServiceImpl;
 
 import javax.validation.Valid;
@@ -25,16 +25,16 @@ public class StatsController {
 
     @GetMapping("/stats")
     @ResponseStatus(HttpStatus.OK)
-    public List<StatsDto> getStats(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @RequestParam(value = "start") LocalDateTime start,
-                                   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @RequestParam(value = "end") LocalDateTime end,
-                                   @RequestParam(required = false) List<String> uris,
-                                   @RequestParam(required = false, defaultValue = "false") Boolean unique) {
+    public List<StatsResponseDto> getStats(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @RequestParam(value = "start") LocalDateTime start,
+                                           @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") @RequestParam(value = "end") LocalDateTime end,
+                                           @RequestParam(required = false) List<String> uris,
+                                           @RequestParam(required = false, defaultValue = "false") Boolean unique) {
         return statsServiceImpl.getStats(start, end, uris, unique);
     }
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public EndpointHitDto save(@RequestBody @Valid EndpointHitDto statsHitDto) {
+    public StatsHitDto save(@RequestBody @Valid StatsHitDto statsHitDto) {
         return statsServiceImpl.save(statsHitDto);
     }
 }
