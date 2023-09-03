@@ -27,7 +27,7 @@ public class StatsClient {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(Mono.just(endpointHitDto), StatsHitDto.class)
                 .retrieve()
-                .bodyToMono(StatsHitDto .class)
+                .bodyToMono(StatsHitDto.class)
                 .block();
     }
 
