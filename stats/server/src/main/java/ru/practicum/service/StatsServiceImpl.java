@@ -6,11 +6,11 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.StatsHitDto;
-import ru.practicum.StatsResponseDto;
+import ru.practicum.EndpointHitDto;
+import ru.practicum.StatsDto;
 import ru.practicum.mapper.Mapper;
-import ru.practicum.model.StatsHit;
-import ru.practicum.model.StatsResponse;
+import ru.practicum.model.EndpointHit;
+import ru.practicum.model.Stats;
 import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
@@ -26,15 +26,15 @@ public class StatsServiceImpl implements StatsService {
     final StatsRepository statsRepository;
 
     @Transactional
-    public StatsHitDto save(StatsHitDto statsHitDto) {
+    public EndpointHitDto save(EndpointHitDto endpointHitDto) {
         log.info("Сохранение статистики....");
-        StatsHit statsHit = Mapper.toHit(statsHitDto);
-        StatsHit savedStatsHit = statsRepository.save(statsHit);
-        return Mapper.toHitDto(savedStatsHit);
+        EndpointHit endpointHit = Mapper.toHit(endpointHitDto);
+        EndpointHit savedEndpointHit = statsRepository.save(endpointHit);
+        return Mapper.toHitDto(savedEndpointHit);
     }
 
-    public List<StatsResponseDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        List<StatsResponse> statsList;
+    public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+        List<Stats> statsList;
         log.info("Получение статистики.....");
         if (unique) {
             if (uris != null) {
@@ -50,11 +50,11 @@ public class StatsServiceImpl implements StatsService {
             }
         }
 
-        List<StatsResponseDto> statsResponseDtoList = new ArrayList<>();
-        for (StatsResponse stats : statsList) {
-            statsResponseDtoList.add(Mapper.toStatsDto(stats));
+        List<StatsDto> statsDtoList = new ArrayList<>();
+        for (Stats stats : statsList) {
+            statsDtoList.add(Mapper.toStatsDto(stats));
         }
 
-        return statsResponseDtoList;
+        return statsDtoList;
     }
 }

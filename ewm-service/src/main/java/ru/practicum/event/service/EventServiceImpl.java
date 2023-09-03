@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.StatsClient;
-import ru.practicum.StatsHitDto;
-import ru.practicum.StatsResponseDto;
+import ru.practicum.EndpointHitDto;
+import ru.practicum.StatsDto;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.event.dto.*;
@@ -186,7 +186,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEventDtoById(Long eventId, String uri, String ip) {
-        statsClient.saveHit(new StatsHitDto("ewm-service",
+        statsClient.saveHit(new EndpointHitDto("ewm-service",
                 uri,
                 ip,
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
@@ -259,7 +259,7 @@ public class EventServiceImpl implements EventService {
             }
             events = eventRepository.findEventList(text, categories, paid, startDate, endDate, EventState.PUBLISHED);
         }
-        statsClient.saveHit(new StatsHitDto("ewm-service",
+        statsClient.saveHit(new EndpointHitDto("ewm-service",
                 uri,
                 ip,
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
@@ -291,8 +291,8 @@ public class EventServiceImpl implements EventService {
                 lowLocalDateTime = event.getCreatedOn();
             }
         }
-        List<StatsResponseDto> viewsCounter = getViewsCounter(uris, lowLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        for (StatsResponseDto statsDto : viewsCounter) {
+        List<StatsDto> viewsCounter = getViewsCounter(uris, lowLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        for (StatsDto statsDto : viewsCounter) {
             String[] split = statsDto.getUri().split("/");
             eventIdsWithViewsCounter.put(Long.parseLong(split[2]), Math.toIntExact(statsDto.getHits()));
         }
@@ -316,8 +316,8 @@ public class EventServiceImpl implements EventService {
         return eventFullDto;
     }
 
-    List<StatsResponseDto> getViewsCounter(List<String> uris, String CreatedOn) {
-        List<StatsResponseDto> viewsForUris = statsClient.getStats(CreatedOn,
+    List<StatsDto> getViewsCounter(List<String> uris, String CreatedOn) {
+        List<StatsDto> viewsForUris = statsClient.getStats(CreatedOn,
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 uris, true);
         return viewsForUris;
@@ -335,8 +335,8 @@ public class EventServiceImpl implements EventService {
                     lowLocalDateTime = LocalDateTime.parse(dto.getCreatedOn().replace(" ", "T"));
                 }
             }
-            List<StatsResponseDto> viewsCounter = getViewsCounter(uris, lowLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-            for (StatsResponseDto statsDto : viewsCounter) {
+            List<StatsDto> viewsCounter = getViewsCounter(uris, lowLocalDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            for (StatsDto statsDto : viewsCounter) {
                 String[] split = statsDto.getUri().split("/");
                 eventIdsWithViewsCounter.put(Long.parseLong(split[2]), Math.toIntExact(statsDto.getHits()));
             }

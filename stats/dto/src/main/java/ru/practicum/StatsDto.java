@@ -1,4 +1,4 @@
-package ru.practicum.model;
+package ru.practicum;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class StatsResponse {
+public class StatsDto {
 
     String app;
     String uri;
