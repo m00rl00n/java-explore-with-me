@@ -7,8 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -23,26 +21,26 @@ public class StatsClient {
         webClient = WebClient.create(connectionURL);
     }
 
-    public StatsHitDto save(StatsHitDto statsHitDto) {
+    public StatsHitDto saveHit(StatsHitDto endpointHitDto) {
         return webClient.post()
                 .uri("/hit")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(Mono.just(statsHitDto), StatsHitDto.class)
+                .body(Mono.just(endpointHitDto), StatsHitDto.class)
                 .retrieve()
-                .bodyToMono(StatsHitDto.class)
+                .bodyToMono(StatsHitDto .class)
                 .block();
     }
 
-    public Flux<StatsResponseDto> getStats(String start, String end, List<String> uris, Boolean unique) {
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/stats")
-                .queryParam("start", start)
-                .queryParam("end", end)
-                .queryParam("uris", uris)
-                .queryParam("unique", unique);
-
-        return webClient.get()
-                .uri(uriBuilder.build().toUri())
+    public List<StatsResponseDto> getStats(String start, String end, List<String> uris, Boolean unique) {
+        return List.of(webClient.get()
+                .uri(uriWithParams -> uriWithParams.path("/stats")
+                        .queryParam("start", start)
+                        .queryParam("end", end)
+                        .queryParam("uris", uris)
+                        .queryParam("unique", unique)
+                        .build())
                 .retrieve()
-                .bodyToFlux(StatsResponseDto.class);
+                .bodyToMono(StatsResponseDto[].class)
+                .block());
     }
 }
