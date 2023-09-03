@@ -17,7 +17,7 @@ public class StatsClient {
 
     final WebClient webClient;
 
-    public StatsClient(@Value("${stats-server.url}") String connectionURL) {
+    public StatsClient(@Value("${server.url}") String connectionURL) {
         webClient = WebClient.create(connectionURL);
     }
 
