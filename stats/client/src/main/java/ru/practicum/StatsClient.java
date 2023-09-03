@@ -21,11 +21,11 @@ public class StatsClient {
         webClient = WebClient.create(connectionURL);
     }
 
-    public EndpointHitDto saveHit(EndpointHitDto HitDto) {
+    public EndpointHitDto saveHit(EndpointHitDto hitDto) {
         return webClient.post()
                 .uri("/hit")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(Mono.just(HitDto), EndpointHitDto.class)
+                .body(Mono.just(hitDto), EndpointHitDto.class)
                 .retrieve()
                 .bodyToMono(EndpointHitDto.class)
                 .block();
