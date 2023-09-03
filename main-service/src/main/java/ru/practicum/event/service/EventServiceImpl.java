@@ -68,7 +68,7 @@ public class EventServiceImpl implements EventService {
             event.setRequestModeration(true);
         }
         if (LocalDateTime.now().isAfter(event.getEventDate().minus(2, ChronoUnit.HOURS))) {
-            throw new WrongDataException("До начала события меньше часа, изменение невозможно");
+            throw new WrongDataException("До начала события меньше часа, измененить невозможно");
         }
         event = eventRepository.save(event);
         log.info("Событие сохранено " + event.getId());
