@@ -17,15 +17,15 @@ public class StatsClient {
 
     final WebClient webClient;
 
-    public StatsClient(@Value("${server.url}") String connectionURL) {
+    public StatsClient(@Value("${stats-server.url}") String connectionURL) {
         webClient = WebClient.create(connectionURL);
     }
 
-    public EndpointHitDto saveHit(EndpointHitDto hitDto) {
+    public EndpointHitDto saveHit(EndpointHitDto HitDto) {
         return webClient.post()
                 .uri("/hit")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(Mono.just(hitDto), EndpointHitDto.class)
+                .body(Mono.just(HitDto), EndpointHitDto.class)
                 .retrieve()
                 .bodyToMono(EndpointHitDto.class)
                 .block();

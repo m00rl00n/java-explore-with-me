@@ -27,19 +27,19 @@ public class UserDtoMapper {
         return new UserShortDto(user.getId(), user.getName());
     }
 
-    public User mapDtoToUser(UserDto userDto) {
-        return new User(
-                userDto.getId(),
-                userDto.getEmail(),
-                userDto.getName()
-        );
-    }
-
     public static User mapNewUserRequestToUser(NewUserRequest newUser) {
         return new User(
                 null,
                 newUser.getEmail(),
                 newUser.getName()
+        );
+    }
+
+    public User mapDtoToUser(UserDto userDto) {
+        return new User(
+                userDto.getId(),
+                userDto.getEmail(),
+                userDto.getName()
         );
     }
 }

@@ -34,7 +34,7 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public EndpointHitDto save(@RequestBody @Valid EndpointHitDto endpointHitDto) {
-        return statsServiceImpl.save(endpointHitDto);
+    public EndpointHitDto save(@RequestBody @Valid EndpointHitDto statsHitDto) {
+        return statsServiceImpl.save(statsHitDto);
     }
 }

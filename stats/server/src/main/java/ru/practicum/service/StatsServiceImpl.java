@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.StatsDto;
 import ru.practicum.mapper.Mapper;
-import ru.practicum.model.EndpointHit;
-import ru.practicum.model.Stats;
+import ru.practicum.model.StatsHit;
+import ru.practicum.model.StatsResponse;
 import ru.practicum.repository.StatsRepository;
 
 import java.time.LocalDateTime;
@@ -26,15 +26,15 @@ public class StatsServiceImpl implements StatsService {
     final StatsRepository statsRepository;
 
     @Transactional
-    public EndpointHitDto save(EndpointHitDto endpointHitDto) {
+    public EndpointHitDto save(EndpointHitDto statsHitDto) {
         log.info("Сохранение статистики....");
-        EndpointHit endpointHit = Mapper.toHit(endpointHitDto);
-        EndpointHit savedEndpointHit = statsRepository.save(endpointHit);
-        return Mapper.toHitDto(savedEndpointHit);
+        StatsHit statsHit = Mapper.toHit(statsHitDto);
+        StatsHit savedStatsHit = statsRepository.save(statsHit);
+        return Mapper.toHitDto(savedStatsHit);
     }
 
     public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        List<Stats> statsList;
+        List<StatsResponse> statsList;
         log.info("Получение статистики.....");
         if (unique) {
             if (uris != null) {
@@ -50,11 +50,11 @@ public class StatsServiceImpl implements StatsService {
             }
         }
 
-        List<StatsDto> statsDtoList = new ArrayList<>();
-        for (Stats stats : statsList) {
-            statsDtoList.add(Mapper.toStatsDto(stats));
+        List<StatsDto> statsResponseDtoList = new ArrayList<>();
+        for (StatsResponse stats : statsList) {
+            statsResponseDtoList.add(Mapper.toStatsDto(stats));
         }
 
-        return statsDtoList;
+        return statsResponseDtoList;
     }
 }
