@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateEventUserRequest {
 
