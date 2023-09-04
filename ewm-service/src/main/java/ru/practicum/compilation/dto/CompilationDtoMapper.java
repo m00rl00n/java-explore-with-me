@@ -1,10 +1,8 @@
-package ru.practicum.compilation.service;
+package ru.practicum.compilation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.experimental.PackagePrivate;
 import org.springframework.stereotype.Component;
-import ru.practicum.compilation.dto.CompilationDto;
-import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.event.model.Event;
 
@@ -16,11 +14,11 @@ import java.util.List;
 public class CompilationDtoMapper {
 
     public Compilation mapNewCompilationDtoToCompilation(NewCompilationDto dto, List<Event> events) {
-        return Compilation.builder()
-                .events(events)
-                .title(dto.getTitle())
-                .pinned(dto.getPinned())
-                .build();
+        Compilation compilation = new Compilation();
+        compilation.setEvents(events);
+        compilation.setTitle(dto.getTitle());
+        compilation.setPinned(dto.getPinned());
+        return compilation;
     }
 
     public CompilationDto mapCompilationToDto(Compilation compilation) {

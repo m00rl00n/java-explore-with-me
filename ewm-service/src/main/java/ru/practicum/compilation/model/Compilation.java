@@ -9,7 +9,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,9 +25,7 @@ public class Compilation {
             joinColumns = @JoinColumn(name = "event_id"),
             inverseJoinColumns = @JoinColumn(name = "compilation_id"))
     List<Event> events;
-
     Boolean pinned;
-
     @Column(nullable = false)
     String title;
 }
