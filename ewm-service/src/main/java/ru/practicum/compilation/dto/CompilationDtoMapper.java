@@ -2,7 +2,6 @@ package ru.practicum.compilation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.experimental.PackagePrivate;
-import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.event.model.Event;
