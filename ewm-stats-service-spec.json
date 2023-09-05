@@ -30,7 +30,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EndpointHit"
+                "$ref": "#/components/schemas/StatsHit"
               }
             }
           },
@@ -112,7 +112,7 @@
   },
   "components": {
     "schemas": {
-      "EndpointHit": {
+      "StatsHit": {
         "type": "object",
         "properties": {
           "id": {

@@ -50,11 +50,11 @@ public class StatsServiceImpl implements StatsService {
             }
         }
 
-        List<StatsResponseDto> statsResponseDtoList = new ArrayList<>();
+        List<StatsResponseDto> statsDtoList = new ArrayList<>();
         for (StatsResponse stats : statsList) {
-            statsResponseDtoList.add(Mapper.toStatsDto(stats));
+            statsDtoList.add(Mapper.toStatsDto(stats));
         }
 
-        return statsResponseDtoList;
+        return statsDtoList;
     }
 }
