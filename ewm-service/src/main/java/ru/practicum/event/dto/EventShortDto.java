@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventShortDto {
     Long id;
