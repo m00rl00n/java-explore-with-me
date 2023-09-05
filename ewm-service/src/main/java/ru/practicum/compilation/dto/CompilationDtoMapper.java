@@ -1,6 +1,5 @@
 package ru.practicum.compilation.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.experimental.UtilityClass;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.event.model.Event;
@@ -8,7 +7,6 @@ import ru.practicum.event.model.Event;
 import java.util.List;
 
 @UtilityClass
-@AllArgsConstructor
 public class CompilationDtoMapper {
 
     public Compilation mapNewCompilationDtoToCompilation(NewCompilationDto dto, List<Event> events) {
