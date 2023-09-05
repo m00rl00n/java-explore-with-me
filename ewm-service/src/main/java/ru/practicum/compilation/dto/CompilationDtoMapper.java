@@ -1,16 +1,12 @@
 package ru.practicum.compilation.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.experimental.PackagePrivate;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.event.model.Event;
 
 import java.util.List;
 
-@Component
-@AllArgsConstructor
-@PackagePrivate
+@UtilityClass
 public class CompilationDtoMapper {
 
     public Compilation mapNewCompilationDtoToCompilation(NewCompilationDto dto, List<Event> events) {
