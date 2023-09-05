@@ -46,7 +46,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto addEvent(Long userId, NewEventDto newEvent) {
-        log.info("Добавление нового события пользователем " + userId);
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         Category category = categoryRepository.findById(newEvent.getCategory()).orElseThrow(
@@ -79,7 +78,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventFullDto> getEvents(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
-        log.info("Поиск событий");
         LocalDateTime rangeStartDateTime = null;
         LocalDateTime rangeEndDateTime = null;
         if (rangeStart != null) {
@@ -127,7 +125,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto updateEvent(Long eventId, UpdateEventAdminRequest updateRequest) {
-        log.info("Редактирование данных события и его статуса");
         Event event = eventRepository.findById(eventId).orElseThrow(
                 () -> new NotFoundException("Событие не существует " + eventId));
 
@@ -153,7 +150,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventShortDto> getEventsByUser(Long userId, Integer from, Integer size) {
-        log.info("Получение событий, добавленных пользователем " + userId);
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         return eventRepository.findAllByInitiator(user, PageRequest.of(from / size, size)).stream()
@@ -163,7 +159,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEventOfUserByIds(Long userId, Long eventId) {
-        log.info("Получение полной информации о событии " + eventId + " пользователем " + userId);
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         Event event = getEventById(eventId);
@@ -176,7 +171,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto updateEventOfUserByIds(Long userId, Long eventId, UpdateEventUserRequest request) {
-        log.info("Изменение события " + eventId + " пользователем " + userId);
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         Event event = getEventById(eventId);
@@ -192,7 +186,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEventDtoById(Long eventId, String uri, String ip) {
-        log.info("Получение подробной информации об опубликованном событии по его идентификатору");
         statsClient.saveHit(new StatsHitDto("ewm-service",
                 uri,
                 ip,
@@ -206,10 +199,17 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getEventsWithFilters(String text, List<Long> categories, Boolean paid,
-                                                    String rangeStart, String rangeEnd, Boolean onlyAvailable,
-                                                    String sort, Integer from, Integer size, String uri, String ip) {
-        log.info("Получение событий с возможностью фильтрации");
+    public List<EventShortDto> getEventsWithFilters(String text,
+                                                    List<Long> categories,
+                                                    Boolean paid,
+                                                    String rangeStart,
+                                                    String rangeEnd,
+                                                    Boolean onlyAvailable,
+                                                    String sort,
+                                                    Integer from,
+                                                    Integer size,
+                                                    String uri,
+                                                    String ip) {
         List<Event> events;
         LocalDateTime startDate;
         LocalDateTime endDate;

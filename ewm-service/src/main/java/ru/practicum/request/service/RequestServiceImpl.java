@@ -15,7 +15,6 @@ import ru.practicum.exception.WrongDataException;
 import ru.practicum.request.dto.EventRequestStatusUpdateRequest;
 import ru.practicum.request.dto.EventRequestStatusUpdateResult;
 import ru.practicum.request.dto.ParticipationRequestDto;
-import ru.practicum.request.dto.RequestDtoMapper;
 import ru.practicum.request.model.ParticipationRequest;
 import ru.practicum.request.repository.RequestRepository;
 import ru.practicum.user.model.User;
@@ -39,7 +38,6 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ParticipationRequestDto> getParticipationRequestsDto(Long userId, Long eventId) {
-        log.info("Получение информации...... ");
         List<ParticipationRequest> requests = getParticipationRequests(userId, eventId);
         return requests.stream()
                 .map(requestDtoMapper::mapRequestToDto)
@@ -51,7 +49,6 @@ public class RequestServiceImpl implements RequestService {
     public EventRequestStatusUpdateResult updateParticipationRequest(Long userId,
                                                                      Long eventId,
                                                                      EventRequestStatusUpdateRequest updateRequest) {
-        log.info("Изменение статуса заявок на участие в событии пользователя " + userId);
         List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
         List<ParticipationRequestDto> rejectedRequests = new ArrayList<>();
         Event event = getEventById(eventId);
@@ -92,7 +89,6 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ParticipationRequestDto> getParticipationRequestsByUserId(Long userId) {
-        log.info("Получение информации о заявках пользователя...");
         User user = userService.getUserById(userId);
         return requestRepository.findByUserId(userId).stream()
                 .map(requestDtoMapper::mapRequestToDto)
@@ -101,7 +97,6 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ParticipationRequestDto addParticipationRequest(Long userId, Long eventId) {
-        log.info("Заявка пользователем " + userId + " запроса на участие в событии " + eventId);
         User user = userService.getUserById(userId);
         Event event = getEventById(eventId);
         if (event.getInitiator().getId().equals(userId)) {
@@ -134,7 +129,6 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ParticipationRequestDto cancelParticipationRequest(Long userId, Long requestId) {
-        log.info("Отмена запроса на участие ");
         User user = userService.getUserById(userId);
         ParticipationRequest request = requestRepository.findById(requestId).orElseThrow(
                 () -> new NotFoundException("Запрос " + requestId + " не существует")
