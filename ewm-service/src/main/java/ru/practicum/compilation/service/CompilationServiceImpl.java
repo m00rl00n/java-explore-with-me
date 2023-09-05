@@ -33,7 +33,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto add(NewCompilationDto compilationDto) {
-        log.info("Добавление подборки.....");
+        log.info("Добавление подборки......");
         List<Event> events = getEventsFromDto(compilationDto);
         Compilation compilation = createOrUpdateCompilation(compilationDto, events);
         CompilationDto result = compileDtoWithEvents(compilation);
