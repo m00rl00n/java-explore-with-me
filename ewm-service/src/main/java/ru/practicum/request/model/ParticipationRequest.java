@@ -19,14 +19,10 @@ public class ParticipationRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
     String created;
-
     @ManyToOne
     Event event;
-
     @ManyToOne
     User requester;
-
     String status;
 }

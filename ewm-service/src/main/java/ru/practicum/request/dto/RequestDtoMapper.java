@@ -1,7 +1,6 @@
-package ru.practicum.request.service;
+package ru.practicum.request.dto;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.request.dto.ParticipationRequestDto;
 import ru.practicum.request.model.ParticipationRequest;
 
 @Component
