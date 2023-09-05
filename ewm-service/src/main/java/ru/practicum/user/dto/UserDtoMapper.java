@@ -1,12 +1,11 @@
-package ru.practicum.user.service;
+package ru.practicum.user.dto;
 
-import org.springframework.stereotype.Component;
-import ru.practicum.user.dto.NewUserRequest;
-import ru.practicum.user.dto.UserDto;
-import ru.practicum.user.dto.UserShortDto;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.practicum.user.model.User;
 
-@Component
+@Service
+@AllArgsConstructor
 public class UserDtoMapper {
 
     public static UserDto mapUserToDto(User user) {
@@ -19,10 +18,7 @@ public class UserDtoMapper {
 
     public static UserShortDto mapUserToShortDto(User user) {
         if (user.getId() == null) {
-            return UserShortDto.builder()
-                    .id(null)
-                    .name(user.getName())
-                    .build();
+            return new UserShortDto(null, user.getName());
         }
         return new UserShortDto(user.getId(), user.getName());
     }

@@ -5,7 +5,7 @@ import ru.practicum.category.dto.CategoryDtoMapper;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.model.EventState;
-import ru.practicum.user.service.UserDtoMapper;
+import ru.practicum.user.dto.UserDtoMapper;
 
 import java.time.format.DateTimeFormatter;
 

@@ -9,16 +9,17 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    Integer countByName(String name);
+
     @Query("SELECT u FROM User u " +
             "WHERE u.id IN :ids")
     List<User> findAllByIdsPageable(List<Long> ids, Pageable page);
+
+    @Query("SELECT u FROM User u")
+    List<User> findAllPageable(Pageable page);
 
     @Query("SELECT u FROM User u " +
             "WHERE u.name = :name")
     List<User> findByName(String name);
 
-    @Query("SELECT u FROM User u")
-    List<User> findAllPageable(Pageable page);
-
-    Integer countByName(String name);
 }
