@@ -46,8 +46,8 @@ public class RequestServiceImpl implements RequestService {
     @Override
     @Transactional
     public EventRequestStatusUpdateResult update(Long userId,
-                                                                     Long eventId,
-                                                                     EventRequestStatusUpdateRequest updateRequest) {
+                                                 Long eventId,
+                                                 EventRequestStatusUpdateRequest updateRequest) {
         log.info("Изменение статуса заявок на участие в событии пользователя " + userId);
         List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
         List<ParticipationRequestDto> rejectedRequests = new ArrayList<>();

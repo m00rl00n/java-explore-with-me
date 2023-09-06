@@ -2,8 +2,6 @@ package ru.practicum.request.dto;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.practicum.request.dto.EventRequestStatusUpdateResult;
-import ru.practicum.request.dto.ParticipationRequestDto;
 
 import java.util.List;
 
