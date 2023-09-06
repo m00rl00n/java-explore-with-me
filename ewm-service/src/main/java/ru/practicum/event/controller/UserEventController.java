@@ -31,9 +31,9 @@ public class UserEventController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventFullDto addNewEventByUser(@PathVariable Long userId,
-                                          @Valid @RequestBody NewEventDto newEvent) {
-        return eventService.addEvent(userId, newEvent);
+    public EventFullDto add(@PathVariable Long userId,
+                            @Valid @RequestBody NewEventDto newEvent) {
+        return eventService.add(userId, newEvent);
     }
 
     @GetMapping("/{eventId}")

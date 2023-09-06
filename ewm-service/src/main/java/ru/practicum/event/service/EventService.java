@@ -5,13 +5,13 @@ import ru.practicum.event.dto.*;
 import java.util.List;
 
 public interface EventService {
-    List<EventFullDto> getEvents(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size);
+    List<EventFullDto> get(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size);
 
-    EventFullDto updateEvent(Long eventId, UpdateEventAdminRequest updateRequest);
+    EventFullDto update(Long eventId, UpdateEventAdminRequest updateRequest);
 
     List<EventShortDto> getEventsByUser(Long userId, Integer from, Integer size);
 
-    EventFullDto addEvent(Long userId, NewEventDto newEvent);
+    EventFullDto add(Long userId, NewEventDto newEvent);
 
     EventFullDto getEventDtoById(Long eventId, String uri, String ip);
 

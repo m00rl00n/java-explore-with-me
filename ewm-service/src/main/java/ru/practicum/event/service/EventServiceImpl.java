@@ -45,7 +45,7 @@ public class EventServiceImpl implements EventService {
     final LocationRepository locationRepository;
 
     @Override
-    public EventFullDto addEvent(Long userId, NewEventDto newEvent) {
+    public EventFullDto add(Long userId, NewEventDto newEvent) {
         log.info("Добавление нового события пользователем " + userId);
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
@@ -78,7 +78,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getEvents(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
+    public List<EventFullDto> get(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
         log.info("Поиск событий");
         LocalDateTime rangeStartDateTime = null;
         LocalDateTime rangeEndDateTime = null;
@@ -126,7 +126,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto updateEvent(Long eventId, UpdateEventAdminRequest updateRequest) {
+    public EventFullDto update(Long eventId, UpdateEventAdminRequest updateRequest) {
         log.info("Редактирование данных события и его статуса");
         Event event = eventRepository.findById(eventId).orElseThrow(
                 () -> new NotFoundException("Событие не существует " + eventId));

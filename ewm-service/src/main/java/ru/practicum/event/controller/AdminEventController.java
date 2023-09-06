@@ -20,19 +20,19 @@ public class AdminEventController {
     final EventService eventService;
 
     @GetMapping
-    public List<EventFullDto> getEvents(@RequestParam(required = false) List<Long> users,
-                                        @RequestParam(required = false) List<String> states,
-                                        @RequestParam(required = false) List<Long> categories,
-                                        @RequestParam(required = false) String rangeStart,
-                                        @RequestParam(required = false) String rangeEnd,
-                                        @RequestParam(required = false, defaultValue = "0") Integer from,
-                                        @RequestParam(required = false, defaultValue = "10") Integer size) {
-        return eventService.getEvents(users, states, categories, rangeStart, rangeEnd, from, size);
+    public List<EventFullDto> get(@RequestParam(required = false) List<Long> users,
+                                  @RequestParam(required = false) List<String> states,
+                                  @RequestParam(required = false) List<Long> categories,
+                                  @RequestParam(required = false) String rangeStart,
+                                  @RequestParam(required = false) String rangeEnd,
+                                  @RequestParam(required = false, defaultValue = "0") Integer from,
+                                  @RequestParam(required = false, defaultValue = "10") Integer size) {
+        return eventService.get(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
     @PatchMapping("/{eventId}")
-    public EventFullDto updateEvent(@PathVariable Long eventId,
-                                    @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
-        return eventService.updateEvent(eventId, updateEventAdminRequest);
+    public EventFullDto update(@PathVariable Long eventId,
+                               @Valid @RequestBody UpdateEventAdminRequest updateEventAdminRequest) {
+        return eventService.update(eventId, updateEventAdminRequest);
     }
 }

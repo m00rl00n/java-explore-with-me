@@ -48,7 +48,7 @@ public class RequestServiceImpl implements RequestService {
     public EventRequestStatusUpdateResult update(Long userId,
                                                  Long eventId,
                                                  EventRequestStatusUpdateRequest updateRequest) {
-        log.info("Изменение статуса заявок на участие в событии пользователя " + userId);
+        log.info("Изменение статуса заявок.....");
         List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
         List<ParticipationRequestDto> rejectedRequests = new ArrayList<>();
         Event event = getEventById(eventId);
@@ -63,8 +63,8 @@ public class RequestServiceImpl implements RequestService {
                                 .peek(p -> p.setStatus("REJECTED"))
                                 .collect(Collectors.toList());
                         requestRepository.saveAll(pending);
-                        log.info("Слишком много заявок на участие, оставшиеся заявки переведены в статус Reject");
-                        throw new ConflictException("Слишком много заявок на участие, оставшиеся заявки переведены в статус Reject");
+                        log.info("Слишком много заявок на участие");
+                        throw new ConflictException("Слишком много заявок на участие");
                     }
                 }
                 if (updateRequest.getStatus().equals("REJECTED") && request.getStatus().equals("CONFIRMED")) {
@@ -80,7 +80,7 @@ public class RequestServiceImpl implements RequestService {
                 result.add(request);
                 confirmedRequestsCounter++;
             } else {
-                throw new WrongDataException("Неверный статус запроса");
+                throw new WrongDataException("Неверный статус");
             }
         }
         requestRepository.saveAll(result);
@@ -98,11 +98,11 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ParticipationRequestDto add(Long userId, Long eventId) {
-        log.info("Заявка пользователем " + userId + " запроса на участие в событии " + eventId);
+        log.info("Заявка запроса на участие");
         User user = userService.getUserById(userId);
         Event event = getEventById(eventId);
         if (event.getInitiator().getId().equals(userId)) {
-            throw new ConflictException("Владелец не может подать заявку на участие в своём событии");
+            throw new ConflictException("Владелец не может подать заявку на участие");
         }
         if (!event.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictException("Событие не опубликовано, заявка не подана");
@@ -142,10 +142,10 @@ public class RequestServiceImpl implements RequestService {
         log.info("Отмена запроса на участие ");
         User user = userService.getUserById(userId);
         ParticipationRequest request = requestRepository.findById(requestId).orElseThrow(
-                () -> new NotFoundException("Запрос " + requestId + " не существует")
+                () -> new NotFoundException("Запрос не существует")
         );
         if (!request.getRequester().getId().equals(userId)) {
-            throw new ConflictException("Заявка " + requestId + " оставлена не пользователем " + userId);
+            throw new ConflictException("Заявка  оставлена не пользователем " + userId);
         }
         request.setStatus("CANCELED");
         log.info("Отмена заявки на участие " + requestId);
@@ -165,7 +165,7 @@ public class RequestServiceImpl implements RequestService {
         User user = userService.getUserById(userId);
         Event event = getEventById(eventId);
         if (!user.getId().equals(event.getInitiator().getId())) {
-            throw new WrongDataException("Пользователь " + userId + " не инициатор события " + eventId);
+            throw new WrongDataException("Пользователь не инициатор события " + eventId);
         }
         return requestRepository.findByEventInitiatorId(userId);
     }
@@ -177,6 +177,6 @@ public class RequestServiceImpl implements RequestService {
 
     Event getEventById(Long eventId) {
         return eventRepository.findById(eventId).orElseThrow(
-                () -> new NotFoundException("Событие " + eventId + " не найдено"));
+                () -> new NotFoundException("Событие не найдено"));
     }
 }
