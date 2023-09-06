@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @AllArgsConstructor
-@Builder
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ParticipationRequestDto {
 
@@ -15,4 +15,5 @@ public class ParticipationRequestDto {
     Long id;
     Long requester;
     String status;
+
 }

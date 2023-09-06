@@ -10,14 +10,14 @@ public interface RequestService {
 
     List<ParticipationRequestDto> getParticipationRequestsDto(Long userId, Long eventId);
 
-    EventRequestStatusUpdateResult updateParticipationRequest(Long userId,
-                                                              Long eventId,
-                                                              EventRequestStatusUpdateRequest updateRequest);
+    EventRequestStatusUpdateResult update(Long userId,
+                                          Long eventId,
+                                          EventRequestStatusUpdateRequest updateRequest);
 
     List<ParticipationRequestDto> getParticipationRequestsByUserId(Long userId);
 
-    ParticipationRequestDto addParticipationRequest(Long userId, Long eventId);
+    ParticipationRequestDto add(Long userId, Long eventId);
 
-    ParticipationRequestDto cancelParticipationRequest(Long userId, Long requestId);
+    ParticipationRequestDto cancel(Long userId, Long requestId);
 
 }

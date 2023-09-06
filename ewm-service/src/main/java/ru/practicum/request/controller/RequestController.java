@@ -17,23 +17,18 @@ public class RequestController {
 
     final RequestService requestService;
 
+    @PostMapping("/requests")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ParticipationRequestDto add(@PathVariable Long userId,
+                                       @RequestParam Long eventId) {
+        return requestService.add(userId, eventId);
+    }
+
     @GetMapping("/requests")
     public List<ParticipationRequestDto> getRequestsOfUser(@PathVariable Long userId) {
         return requestService.getParticipationRequestsByUserId(userId);
     }
 
-    @PostMapping("/requests")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ParticipationRequestDto addParticipationRequest(@PathVariable Long userId,
-                                                           @RequestParam Long eventId) {
-        return requestService.addParticipationRequest(userId, eventId);
-    }
-
-    @PatchMapping("/requests/{requestId}/cancel")
-    public ParticipationRequestDto cancelParticipationRequest(@PathVariable Long userId,
-                                                              @PathVariable Long requestId) {
-        return requestService.cancelParticipationRequest(userId, requestId);
-    }
 
     @GetMapping("/events/{eventId}/requests")
     public List<ParticipationRequestDto> getParticipationRequest(@PathVariable Long userId,
@@ -42,9 +37,15 @@ public class RequestController {
     }
 
     @PatchMapping("/events/{eventId}/requests")
-    public EventRequestStatusUpdateResult updateParticipationRequest(@PathVariable Long userId,
-                                                                     @PathVariable Long eventId,
-                                                                     @RequestBody EventRequestStatusUpdateRequest request) {
-        return requestService.updateParticipationRequest(userId, eventId, request);
+    public EventRequestStatusUpdateResult update(@PathVariable Long userId,
+                                                 @PathVariable Long eventId,
+                                                 @RequestBody EventRequestStatusUpdateRequest request) {
+        return requestService.update(userId, eventId, request);
+    }
+
+    @PatchMapping("/requests/{requestId}/cancel")
+    public ParticipationRequestDto cancel(@PathVariable Long userId,
+                                          @PathVariable Long requestId) {
+        return requestService.cancel(userId, requestId);
     }
 }
