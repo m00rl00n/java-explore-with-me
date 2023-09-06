@@ -23,7 +23,6 @@ public class RequestController {
                                        @RequestParam Long eventId) {
         return requestService.add(userId, eventId);
     }
-
     @GetMapping("/requests")
     public List<ParticipationRequestDto> getRequestsOfUser(@PathVariable Long userId) {
         return requestService.getParticipationRequestsByUserId(userId);
@@ -38,11 +37,10 @@ public class RequestController {
 
     @PatchMapping("/events/{eventId}/requests")
     public EventRequestStatusUpdateResult update(@PathVariable Long userId,
-                                                 @PathVariable Long eventId,
-                                                 @RequestBody EventRequestStatusUpdateRequest request) {
+                                                                     @PathVariable Long eventId,
+                                                                     @RequestBody EventRequestStatusUpdateRequest request) {
         return requestService.update(userId, eventId, request);
     }
-
     @PatchMapping("/requests/{requestId}/cancel")
     public ParticipationRequestDto cancel(@PathVariable Long userId,
                                           @PathVariable Long requestId) {
