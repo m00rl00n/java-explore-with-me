@@ -88,8 +88,6 @@ public class CompilationServiceImpl implements CompilationService {
         return result;
     }
 
-    // Методы для вынесения повторяющейся логики
-
     private List<Event> getEventsFromDto(NewCompilationDto compilationDto) {
         List<Event> events = new ArrayList<>();
         if (compilationDto.getEvents() != null) {
