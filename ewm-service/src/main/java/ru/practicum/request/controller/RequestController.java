@@ -1,6 +1,6 @@
 package ru.practicum.request.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.request.dto.EventRequestStatusUpdateRequest;
@@ -11,7 +11,7 @@ import ru.practicum.request.service.RequestService;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping(path = "/users/{userId}")
 public class RequestController {
 

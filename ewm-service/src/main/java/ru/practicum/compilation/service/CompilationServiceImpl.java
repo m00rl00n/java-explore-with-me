@@ -1,11 +1,12 @@
 package ru.practicum.compilation.service;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.CompilationDtoMapper;
 import ru.practicum.compilation.dto.NewCompilationDto;
@@ -23,7 +24,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompilationServiceImpl implements CompilationService {
 
@@ -31,6 +32,7 @@ public class CompilationServiceImpl implements CompilationService {
     final CompilationDtoMapper compilationDtoMapper;
     final EventRepository eventRepository;
 
+    @Transactional
     @Override
     public CompilationDto add(NewCompilationDto compilationDto) {
         log.info("Добавление подборки.....");
@@ -40,9 +42,10 @@ public class CompilationServiceImpl implements CompilationService {
         return result;
     }
 
+    @Transactional
     @Override
     public CompilationDto update(Long compId, UpdateCompilationRequest compilationDto) {
-        log.info("Обновление подборки......");
+        log.info("Обновление подборки.....id=" + compId);
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(
                 () -> new NotFoundException("Подборка не существует " + compId));
 
@@ -61,9 +64,10 @@ public class CompilationServiceImpl implements CompilationService {
         return result;
     }
 
+    @Transactional
     @Override
     public void delete(Long compId) {
-        log.info("Удаление подборки.....");
+        log.info("Удаление подборки....id=" + compId);
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(
                 () -> new NotFoundException("Подборка не существует " + compId));
         compilationRepository.deleteById(compId);
@@ -80,7 +84,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto getCompilationById(Long compId) {
-        log.info("Получение информации о подборке.....");
+        log.info("Получение информации о подборке...id=" + compId);
         Compilation compilation = compilationRepository.findById(compId).orElseThrow(
                 () -> new NotFoundException("Подборка не найдена " + compId)
         );

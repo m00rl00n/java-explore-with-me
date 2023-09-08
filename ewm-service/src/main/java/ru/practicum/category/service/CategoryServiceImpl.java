@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.CategoryDtoMapper;
 import ru.practicum.category.dto.NewCategoryRequestDto;
@@ -28,6 +29,8 @@ public class CategoryServiceImpl implements CategoryService {
     final CategoryRepository categoryRepository;
     final EventRepository eventRepository;
 
+
+    @Transactional
     @Override
     public CategoryDto add(NewCategoryRequestDto newCategoryRequestDto) {
         log.info("Добавление новой категории....");
@@ -40,9 +43,10 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryDtoMapper.mapCategoryToDto(category);
     }
 
+    @Transactional
     @Override
     public void delete(Long categoryId) {
-        log.info("Удаление категории.....");
+        log.info("Удаление категории...id=" + categoryId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Категория не существует "));
 
@@ -54,9 +58,10 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
+    @Transactional
     @Override
     public CategoryDto update(Long categoryId, CategoryDto categoryDto) {
-        log.info("Изменение категории....");
+        log.info("Изменение категории...id=" + categoryId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена"));
 
@@ -90,7 +95,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getCategoryById(Long categoryId) {
-        log.info("Получение информации о категории.....");
+        log.info("Получение информации о категории....id=" + categoryId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена"));
         return CategoryDtoMapper.mapCategoryToDto(category);

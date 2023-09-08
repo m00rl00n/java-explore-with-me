@@ -1,7 +1,7 @@
 package ru.practicum.request.service;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestServiceImpl implements RequestService {
 
@@ -36,7 +36,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<ParticipationRequestDto> getParticipationRequestsDto(Long userId, Long eventId) {
-        log.info("Получение информации...... ");
+        log.info("Получение информации о заявках пользователя " + userId + " на участие в событиях");
         List<ParticipationRequest> requests = getParticipationRequests(userId, eventId);
         return requests.stream()
                 .map(requestDtoMapper::mapRequestToDto)
@@ -48,7 +48,7 @@ public class RequestServiceImpl implements RequestService {
     public EventRequestStatusUpdateResult update(Long userId,
                                                  Long eventId,
                                                  EventRequestStatusUpdateRequest updateRequest) {
-        log.info("Изменение статуса заявок.....");
+        log.info("Изменение статуса заявок на участие в событии пользователя " + userId);
         List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
         List<ParticipationRequestDto> rejectedRequests = new ArrayList<>();
         Event event = getEventById(eventId);
@@ -97,8 +97,9 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto add(Long userId, Long eventId) {
-        log.info("Заявка запроса на участие");
+        log.info("Заявка пользователем " + userId + " запроса на участие в событии " + eventId);
         User user = userService.getUserById(userId);
         Event event = getEventById(eventId);
         if (event.getInitiator().getId().equals(userId)) {
@@ -138,8 +139,9 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto cancel(Long userId, Long requestId) {
-        log.info("Отмена запроса на участие ");
+        log.info("Отмена пользователем " + userId + " запроса на участие " + requestId);
         User user = userService.getUserById(userId);
         ParticipationRequest request = requestRepository.findById(requestId).orElseThrow(
                 () -> new NotFoundException("Запрос не существует")

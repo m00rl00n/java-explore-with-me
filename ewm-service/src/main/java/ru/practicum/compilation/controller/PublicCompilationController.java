@@ -1,7 +1,7 @@
 package ru.practicum.compilation.controller;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationDto;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/compilations")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PublicCompilationController {
 

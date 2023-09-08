@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.StatsClient;
 import ru.practicum.StatsHitDto;
 import ru.practicum.StatsResponseDto;
@@ -45,6 +46,7 @@ public class EventServiceImpl implements EventService {
     final LocationRepository locationRepository;
 
     @Override
+    @Transactional
     public EventFullDto add(Long userId, NewEventDto newEvent) {
         log.info("Добавление нового события пользователем " + userId);
         User user = userRepository.findById(userId).orElseThrow(
@@ -126,8 +128,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    @Transactional
     public EventFullDto update(Long eventId, UpdateEventAdminRequest updateRequest) {
-        log.info("Редактирование данных события и его статуса");
+        log.info("Редактирование данных события и его статуса id=" + eventId);
         Event event = eventRepository.findById(eventId).orElseThrow(
                 () -> new NotFoundException("Событие не существует " + eventId));
 

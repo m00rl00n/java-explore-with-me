@@ -1,7 +1,7 @@
 package ru.practicum.category.controller;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import ru.practicum.category.service.CategoryService;
 
 import javax.validation.Valid;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RestController
 @RequestMapping("/admin/categories")

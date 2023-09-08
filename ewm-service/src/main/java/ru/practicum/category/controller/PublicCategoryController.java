@@ -1,7 +1,7 @@
 package ru.practicum.category.controller;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.category.dto.CategoryDto;
@@ -9,7 +9,7 @@ import ru.practicum.category.service.CategoryService;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RestController
 @RequestMapping("/categories")

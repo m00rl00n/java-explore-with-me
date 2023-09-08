@@ -1,7 +1,7 @@
 package ru.practicum.event.controller;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.event.dto.EventFullDto;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/events")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PublicEventController {
 

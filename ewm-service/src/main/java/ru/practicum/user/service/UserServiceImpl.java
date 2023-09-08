@@ -1,12 +1,13 @@
 package ru.practicum.user.service;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.user.dto.NewUserRequest;
@@ -20,13 +21,14 @@ import java.util.List;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserServiceImpl implements UserService {
 
     final UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserDto add(NewUserRequest newUserDto) {
         log.info("Создание пользователя.....");
         if (userRepository.countByName(newUserDto.getName()) > 0) {
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> get(List<Long> ids, Integer from, Integer size) {
-        log.info("Получение информации....");
+        log.info("Получение информации о пользователях");
         List<UserDto> userDtos = new ArrayList<>();
         Pageable pageable = PageRequest.of(from / size, size);
 
@@ -65,8 +67,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(Long userId) {
-        log.info("Удаление....");
+        log.info("Удаление пользователя....id=" + userId);
         userRepository.deleteById(userId);
         log.info("Пользователь удалён");
     }
