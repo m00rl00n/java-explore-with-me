@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void delete(Long userId) {
-        log.info("Удаление пользователя....id=" + userId);
+        log.info("Удаление пользователя....id={}", userId);
         userRepository.deleteById(userId);
         log.info("Пользователь удалён");
     }
