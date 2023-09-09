@@ -46,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Override
     public void delete(Long categoryId) {
-        log.info("Удаление категории.....");
+        log.info("Удаление категории, id = {}", categoryId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Категория не существует "));
 
@@ -61,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     @Override
     public CategoryDto update(Long categoryId, CategoryDto categoryDto) {
-        log.info("Изменение категории...id=" + categoryId);
+        log.info("Изменение категории, id = {}", categoryId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена"));
 
@@ -95,7 +95,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto getCategoryById(Long categoryId) {
-        log.info("Получение информации о категории.....");
+        log.info("Получение информации о категории, id = {}", categoryId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена"));
         return CategoryDtoMapper.mapCategoryToDto(category);
