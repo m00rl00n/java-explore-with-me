@@ -48,7 +48,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventFullDto add(Long userId, NewEventDto newEvent) {
-        log.info("Добавление нового события пользователем " + userId);
+        log.info("Добавление нового события пользователем {}", userId);
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         Category category = categoryRepository.findById(newEvent.getCategory()).orElseThrow(
@@ -156,7 +156,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventShortDto> getEventsByUser(Long userId, Integer from, Integer size) {
-        log.info("Получение событий, добавленных пользователем " + userId);
+        log.info("Получение событий, добавленных пользователем {}", userId);
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         return eventRepository.findAllByInitiator(user, PageRequest.of(from / size, size)).stream()
@@ -166,7 +166,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto getEventOfUserByIds(Long userId, Long eventId) {
-        log.info("Получение полной информации о событии " + eventId + " пользователем " + userId);
+        log.info("Получение полной информации о событии {} пользователем {}", eventId, userId);
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         Event event = getEventById(eventId);
@@ -179,7 +179,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventFullDto updateEventOfUserByIds(Long userId, Long eventId, UpdateEventUserRequest request) {
-        log.info("Изменение события " + eventId + " пользователем " + userId);
+        log.info("Изменение события {} пользователем {}", eventId, userId);
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         Event event = getEventById(eventId);
@@ -468,6 +468,6 @@ public class EventServiceImpl implements EventService {
 
     void saveLocation(Event event) {
         event.setLocation(locationRepository.save(event.getLocation()));
-        log.info("Локация сохранена " + event.getLocation().getId());
+        log.info("Локация сохранена {}", event.getLocation().getId());
     }
 }
