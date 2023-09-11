@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.user.dto.NewUserRequest;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.dto.UserDtoMapper;
 import ru.practicum.user.model.User;
@@ -29,15 +28,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto add(NewUserRequest newUserDto) {
-        log.info("Попытка создания пользователя: {}", newUserDto);
+    public UserDto add(UserDto userDto) {
+        log.info("Попытка создания пользователя: {}", userDto);
 
-        if (userRepository.countByName(newUserDto.getName()) > 0) {
-            log.error("Пользователь с именем '{}' уже существует.", newUserDto.getName());
+        if (userRepository.countByName(userDto.getName()) > 0) {
+            log.error("Пользователь с именем '{}' уже существует.", userDto.getName());
             throw new ConflictException("Пользователь уже существует");
         }
 
-        User user = UserDtoMapper.mapNewUserRequestToUser(newUserDto);
+        User user = UserDtoMapper.mapNewUserRequestToUser(userDto);
         log.debug("Создан пользователь: {}", user);
 
         User savedUser = userRepository.save(user);
@@ -47,19 +46,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> get(List<Long> ids, Integer from, Integer size) {
+    public List<UserDto> get(List<Long> idList, Integer from, Integer size) {
         log.info("Попытка получения информации о пользователях (from={}, size={})", from, size);
         List<UserDto> userDtos = new ArrayList<>();
         Pageable pageable = PageRequest.of(from / size, size);
 
-        if (ids == null) {
+        if (idList == null) {
             List<User> users = userRepository.findAllPageable(pageable);
             log.debug("Получено {} пользователей", users.size());
             for (User user : users) {
                 userDtos.add(UserDtoMapper.toDto(user));
             }
         } else {
-            List<User> users = userRepository.findAllByIdsPageable(ids, pageable);
+            List<User> users = userRepository.findAllByIdsPageable(idList, pageable);
             log.debug("Получено {} пользователей по списку идентификаторов", users.size());
             for (User user : users) {
                 userDtos.add(UserDtoMapper.toDto(user));

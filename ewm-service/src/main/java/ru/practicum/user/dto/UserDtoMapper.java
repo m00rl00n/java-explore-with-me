@@ -23,11 +23,11 @@ public class UserDtoMapper {
         return new UserShortDto(user.getId(), user.getName());
     }
 
-    public static User mapNewUserRequestToUser(NewUserRequest newUser) {
+    public static User mapNewUserRequestToUser(UserDto userDto) {
         return new User(
                 null,
-                newUser.getEmail(),
-                newUser.getName()
+                userDto.getEmail(),
+                userDto.getName()
         );
     }
 

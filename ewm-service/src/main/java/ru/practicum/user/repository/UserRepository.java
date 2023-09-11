@@ -18,8 +18,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u")
     List<User> findAllPageable(Pageable page);
 
-    @Query("SELECT u FROM User u " +
-            "WHERE u.name = :name")
-    List<User> findByName(String name);
-
 }
