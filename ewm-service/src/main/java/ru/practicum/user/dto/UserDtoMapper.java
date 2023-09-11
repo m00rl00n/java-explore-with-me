@@ -23,7 +23,7 @@ public class UserDtoMapper {
         return new UserShortDto(user.getId(), user.getName());
     }
 
-    public static User toNewUser(UserDto newUser) {
+    public static User toNewUser(NewUserRequest newUser) {
         return new User(
                 null,
                 newUser.getEmail(),
@@ -31,11 +31,4 @@ public class UserDtoMapper {
         );
     }
 
-    public User toUser(UserDto userDto) {
-        return new User(
-                userDto.getId(),
-                userDto.getEmail(),
-                userDto.getName()
-        );
-    }
 }

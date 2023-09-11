@@ -13,13 +13,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u " +
             "WHERE u.id IN :ids")
-    List<User> findAllByIdsPageable(List<Long> ids, Pageable page);
+    List<User> findAllByIdsPageable(List<Long> idList, Pageable page);
 
     @Query("SELECT u FROM User u")
     List<User> findAllPageable(Pageable page);
-
-    @Query("SELECT u FROM User u " +
-            "WHERE u.name = :name")
-    List<User> findByName(String name);
 
 }
