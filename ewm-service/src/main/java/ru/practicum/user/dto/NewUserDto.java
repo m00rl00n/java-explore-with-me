@@ -7,17 +7,17 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Data
-@EqualsAndHashCode(of = "id")
+@Getter
+@Setter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewUserDto {
 
     @NotBlank
     @Email
-    @Size(min = 6, max = 254)
+    @Size(min = 6, max = 300)
     String email;
     @NotBlank
-    @Size(min = 2, max = 250)
+    @Size(min = 2, max = 300)
     String name;
 }
