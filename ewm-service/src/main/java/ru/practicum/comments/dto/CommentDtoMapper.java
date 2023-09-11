@@ -12,7 +12,7 @@ public class CommentDtoMapper {
         commentDto.setId(comment.getId());
         commentDto.setText(comment.getText());
         commentDto.setEvent(EventDtoMapper.mapEventToShortDto(comment.getEvent()));
-        commentDto.setAuthor(UserDtoMapper.mapUserToShortDto(comment.getAuthor()));
+        commentDto.setAuthor(UserDtoMapper.toShortDto(comment.getAuthor()));
         commentDto.setCreated(comment.getCreated());
         commentDto.setState(comment.getState());
         commentDto.setPublished(comment.getPublished());
