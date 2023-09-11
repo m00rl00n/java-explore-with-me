@@ -9,10 +9,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@AllArgsConstructor
 @Data
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewEventDto {

@@ -9,11 +9,10 @@ import ru.practicum.user.dto.UserShortDto;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventShortDto {
     Long id;

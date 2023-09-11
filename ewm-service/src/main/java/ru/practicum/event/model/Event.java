@@ -10,8 +10,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

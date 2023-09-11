@@ -7,10 +7,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
 @Data
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewCompilationDto {
 

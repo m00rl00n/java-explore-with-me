@@ -5,8 +5,8 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
