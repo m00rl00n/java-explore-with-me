@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.dto.CategoryDto;
@@ -27,15 +26,13 @@ public class CategoryServiceImpl implements CategoryService {
     final CategoryRepository categoryRepository;
     final EventRepository eventRepository;
 
-
     @Transactional
     @Override
     public CategoryDto add(CategoryDto categoryDto) {
         String categoryName = categoryDto.getName();
         log.debug("Имя новой категории: {}", categoryName);
 
-        Category existingCategory = categoryRepository.findCategoriesByName(categoryName);
-        if (existingCategory != null) {
+        if (categoryRepository.isCategoryExistsByName(categoryName)) {
             log.warn("Категория с именем '{}' уже существует. Операция отменена.", categoryName);
             throw new ConflictException("Категория уже существует");
         }
@@ -52,8 +49,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Long id) {
         log.info("Удаление категории, id = {}", id);
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Категория не существует "));
 
         if (!eventRepository.existsByCategoryId(id)) {
             categoryRepository.deleteById(id);
@@ -68,13 +63,19 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto update(Long id, CategoryDto categoryDto) {
         log.info("Изменение категории, id = {}", id);
         String newCategoryName = categoryDto.getName();
-        Category existingCategory = categoryRepository.findCategoriesByName(newCategoryName);
-        if (existingCategory != null && !existingCategory.getId().equals(id)) {
+
+        if (categoryRepository.isCategoryExistsByName(newCategoryName) &&
+                !categoryRepository.findCategoriesByName(newCategoryName).getId().equals(id)) {
             log.warn("Категория с именем '{}' уже существует. Операция отменена.", newCategoryName);
             throw new ConflictException("Категория с таким именем уже существует");
         }
+
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Категория не найдена"));
+                .orElseThrow(() -> {
+                    log.warn("Категория с id = {} не найдена. Операция отменена.", id);
+                    return new NotFoundException("Категория не найдена");
+                });
+
         category.setName(newCategoryName);
         category = categoryRepository.save(category);
         log.info("Категория успешно изменена, новое имя: '{}'", newCategoryName);
@@ -84,8 +85,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto> getAll(Integer from, Integer size) {
         log.info("Получение полного списка категорий...");
-        List<Category> categories = categoryRepository.findAll(PageRequest.of(from / size, size)).getContent();
+        List<Category> categories = categoryRepository.findAllPaged(from, size);
         List<CategoryDto> categoryDtos = new ArrayList<>();
+
         for (Category category : categories) {
             categoryDtos.add(CategoryDtoMapper.mapCategoryToDto(category));
         }
@@ -104,4 +106,3 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryDtoMapper.mapCategoryToDto(category);
     }
 }
-

@@ -20,7 +20,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "text", nullable = false, length = 7000)
+    @Column(name = "text", nullable = false, length = 2000)
     String text;
 
     @ManyToOne

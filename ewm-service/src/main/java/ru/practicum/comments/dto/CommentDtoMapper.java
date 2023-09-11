@@ -1,10 +1,11 @@
 package ru.practicum.comments.dto;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.comments.model.Comment;
 import ru.practicum.event.dto.EventDtoMapper;
 import ru.practicum.user.dto.UserDtoMapper;
 
-
+@UtilityClass
 public class CommentDtoMapper {
 
     public static CommentDto mapCommentToDto(Comment comment) {
@@ -12,7 +13,7 @@ public class CommentDtoMapper {
         commentDto.setId(comment.getId());
         commentDto.setText(comment.getText());
         commentDto.setEvent(EventDtoMapper.mapEventToShortDto(comment.getEvent()));
-        commentDto.setAuthor(UserDtoMapper.mapUserToShortDto(comment.getAuthor()));
+        commentDto.setAuthor(UserDtoMapper.toShortDto(comment.getAuthor()));
         commentDto.setCreated(comment.getCreated());
         commentDto.setState(comment.getState());
         commentDto.setPublished(comment.getPublished());
