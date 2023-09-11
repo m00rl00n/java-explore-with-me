@@ -1,9 +1,11 @@
 package ru.practicum.request.dto;
 
-import lombok.experimental.UtilityClass;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.practicum.request.model.ParticipationRequest;
 
-@UtilityClass
+@Component
+@AllArgsConstructor
 public class RequestDtoMapper {
 
     public ParticipationRequestDto mapRequestToDto(ParticipationRequest participationRequest) {
