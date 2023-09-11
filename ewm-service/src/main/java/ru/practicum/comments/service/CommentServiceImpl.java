@@ -40,14 +40,14 @@ public class CommentServiceImpl implements CommentService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         Comment comment;
-        Long aLong = requestRepository.countByPublishedEventsAndStatuses(
+        Long count = requestRepository.countByPublishedEventsAndStatuses(
                 userId,
                 eventId,
                 newCommentDto.getCreated() == null ? LocalDateTime.now() : newCommentDto.getCreated(),
                 EventState.PUBLISHED,
                 List.of("CONFIRMED", "ACCEPTED")
         );
-        if (aLong > 0) {
+        if (count > 0) {
             comment = commentRepository.save(getCommentFromDto(user, eventId, newCommentDto));
             log.info("Комментарий сохранен " + comment.getId());
         } else {

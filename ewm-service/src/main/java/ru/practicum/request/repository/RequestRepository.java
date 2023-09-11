@@ -46,4 +46,6 @@ public interface RequestRepository extends JpaRepository<ParticipationRequest, L
             "AND r.event.state = :state " +
             "AND r.status in :statuses ")
     Long countByPublishedEventsAndStatuses(Long userId, Long eventId, LocalDateTime eventDate, EventState state, List<String> statuses);
+
+
 }
