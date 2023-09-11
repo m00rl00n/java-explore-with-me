@@ -26,14 +26,14 @@ public class RequestController {
 
     @GetMapping("/requests")
     public List<ParticipationRequestDto> getRequestsOfUser(@PathVariable Long userId) {
-        return requestService.getRequestsByUserId(userId);
+        return requestService.getParticipationRequestsByUserId(userId);
     }
 
 
     @GetMapping("/events/{eventId}/requests")
-    public List<ParticipationRequestDto> getParticipationInvite(@PathVariable Long userId,
+    public List<ParticipationRequestDto> getParticipationRequest(@PathVariable Long userId,
                                                                  @PathVariable Long eventId) {
-        return requestService.getParticipationInvite(userId, eventId);
+        return requestService.getParticipationRequestsDto(userId, eventId);
     }
 
     @PatchMapping("/events/{eventId}/requests")

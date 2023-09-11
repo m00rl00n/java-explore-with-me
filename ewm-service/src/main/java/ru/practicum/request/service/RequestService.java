@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface RequestService {
 
-    List<ParticipationRequestDto> getParticipationInvite(Long userId, Long eventId);
+    List<ParticipationRequestDto> getParticipationRequestsDto(Long userId, Long eventId);
 
     EventRequestStatusUpdateResult update(Long userId,
                                           Long eventId,
                                           EventRequestStatusUpdateRequest updateRequest);
 
-    List<ParticipationRequestDto> getRequestsByUserId(Long userId);
+    List<ParticipationRequestDto> getParticipationRequestsByUserId(Long userId);
 
     ParticipationRequestDto add(Long userId, Long eventId);
 

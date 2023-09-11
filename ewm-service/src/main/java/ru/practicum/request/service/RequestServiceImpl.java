@@ -35,7 +35,7 @@ public class RequestServiceImpl implements RequestService {
     final RequestRepository requestRepository;
 
     @Override
-    public List<ParticipationRequestDto> getParticipationInvite(Long userId, Long eventId) {
+    public List<ParticipationRequestDto> getParticipationRequestsDto(Long userId, Long eventId) {
         log.info("Получение информации о заявках пользователя {} на участие в событиях", userId);
         List<ParticipationRequest> requests = getParticipationRequests(userId, eventId);
         return requests.stream()
@@ -88,7 +88,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<ParticipationRequestDto> getRequestsByUserId(Long userId) {
+    public List<ParticipationRequestDto> getParticipationRequestsByUserId(Long userId) {
         log.info("Получение информации о заявках пользователя...");
         User user = userService.getUserById(userId);
         return requestRepository.findByUserId(userId).stream()
