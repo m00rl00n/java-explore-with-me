@@ -1,9 +1,11 @@
 package ru.practicum.user.dto;
 
-import lombok.experimental.UtilityClass;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.practicum.user.model.User;
 
-@UtilityClass
+@Service
+@AllArgsConstructor
 public class UserDtoMapper {
 
     public static UserDto toDto(User user) {
