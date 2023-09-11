@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
+import ru.practicum.user.dto.NewUserRequest;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.dto.UserDtoMapper;
 import ru.practicum.user.model.User;
@@ -28,14 +29,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto add(UserDto newUserDto) {
+    public UserDto add(NewUserRequest newUserDto) {
         log.info("Создание пользователя.....");
         if (userRepository.countByName(newUserDto.getName()) > 0) {
             throw new ConflictException("Пользователь уже существует");
         }
-        User user = UserDtoMapper.toNewUser(newUserDto);
+        User user = UserDtoMapper.mapNewUserRequestToUser(newUserDto);
         User savedUser = userRepository.save(user);
-        return UserDtoMapper.toDto(savedUser);
+        return UserDtoMapper.mapUserToDto(savedUser);
     }
 
     @Override
@@ -47,12 +48,12 @@ public class UserServiceImpl implements UserService {
         if (ids == null) {
             List<User> users = userRepository.findAllPageable(pageable);
             for (User user : users) {
-                userDtos.add(UserDtoMapper.toDto(user));
+                userDtos.add(UserDtoMapper.mapUserToDto(user));
             }
         } else {
             List<User> users = userRepository.findAllByIdsPageable(ids, pageable);
             for (User user : users) {
-                userDtos.add(UserDtoMapper.toDto(user));
+                userDtos.add(UserDtoMapper.mapUserToDto(user));
             }
         }
 
