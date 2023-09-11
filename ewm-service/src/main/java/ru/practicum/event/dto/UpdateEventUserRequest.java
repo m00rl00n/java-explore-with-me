@@ -1,13 +1,16 @@
 package ru.practicum.event.dto;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.event.model.Location;
 
 import javax.validation.constraints.Size;
 
-@Data
-@EqualsAndHashCode(of = "id")
+@Getter
+@Setter
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateEventUserRequest {

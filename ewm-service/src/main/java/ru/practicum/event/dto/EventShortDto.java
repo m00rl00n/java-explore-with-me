@@ -9,8 +9,8 @@ import ru.practicum.user.dto.UserShortDto;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-@Data
-@EqualsAndHashCode(of = "id")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
