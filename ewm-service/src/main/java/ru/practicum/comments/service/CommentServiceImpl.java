@@ -160,8 +160,6 @@ public class CommentServiceImpl implements CommentService {
                 () -> new NotFoundException("Эвент не найден  " + eventId)
         );
         Comment comment = CommentDtoMapper.mapDtoToComment(commentDto);
-        comment.setAuthor(user);
-        comment.setEvent(event);
         return comment;
     }
 

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.CategoryDtoMapper;
-import ru.practicum.category.dto.NewCategoryRequestDto;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.event.repository.EventRepository;
@@ -32,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public CategoryDto add(NewCategoryRequestDto newCategoryRequestDto) {
+    public CategoryDto add(CategoryDto newCategoryRequestDto) {
         log.info("Добавление новой категории....");
         String categoryName = newCategoryRequestDto.getName();
         if (categoryRepository.existsByName(categoryName)) {
@@ -94,7 +93,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto getCategoryById(Long categoryId) {
+    public CategoryDto getById(Long categoryId) {
         log.info("Получение информации о категории, id = {}", categoryId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена"));
