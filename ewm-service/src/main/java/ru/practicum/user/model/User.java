@@ -5,8 +5,8 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
-@Data
-@EqualsAndHashCode(of = "id")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -15,7 +15,6 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(unique = true, nullable = false)
