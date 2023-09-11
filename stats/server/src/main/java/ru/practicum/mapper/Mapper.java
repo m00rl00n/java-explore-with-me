@@ -29,10 +29,10 @@ public class Mapper {
     }
 
     public static StatsResponseDto toStatsDto(StatsResponse stats) {
-        StatsResponseDto statsResponseDto = new StatsResponseDto();
-        statsResponseDto.setApp(stats.getApp());
-        statsResponseDto.setHits(stats.getHits());
-        statsResponseDto.setUri(stats.getUri());
-        return statsResponseDto;
+        StatsResponseDto statsDto = new StatsResponseDto();
+        statsDto.setApp(stats.getApp());
+        statsDto.setHits(stats.getHits());
+        statsDto.setUri(stats.getUri());
+        return statsDto;
     }
 }
