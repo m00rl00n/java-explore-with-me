@@ -30,28 +30,37 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto add(NewUserRequest newUserDto) {
-        log.info("Создание пользователя.....");
+        log.info("Попытка создания пользователя: {}", newUserDto);
+
         if (userRepository.countByName(newUserDto.getName()) > 0) {
+            log.error("Пользователь с именем '{}' уже существует.", newUserDto.getName());
             throw new ConflictException("Пользователь уже существует");
         }
+
         User user = UserDtoMapper.mapNewUserRequestToUser(newUserDto);
+        log.debug("Создан пользователь: {}", user);
+
         User savedUser = userRepository.save(user);
+        log.info("Пользователь успешно создан: {}", savedUser);
+
         return UserDtoMapper.toDto(savedUser);
     }
 
     @Override
     public List<UserDto> get(List<Long> ids, Integer from, Integer size) {
-        log.info("Получение информации о пользователях");
+        log.info("Попытка получения информации о пользователях (from={}, size={})", from, size);
         List<UserDto> userDtos = new ArrayList<>();
         Pageable pageable = PageRequest.of(from / size, size);
 
         if (ids == null) {
             List<User> users = userRepository.findAllPageable(pageable);
+            log.debug("Получено {} пользователей", users.size());
             for (User user : users) {
                 userDtos.add(UserDtoMapper.toDto(user));
             }
         } else {
             List<User> users = userRepository.findAllByIdsPageable(ids, pageable);
+            log.debug("Получено {} пользователей по списку идентификаторов", users.size());
             for (User user : users) {
                 userDtos.add(UserDtoMapper.toDto(user));
             }
@@ -62,15 +71,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
+        log.info("Попытка получения пользователя по ID: {}", userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            log.error("Пользователь с ID {} не найден.", userId);
+            return new NotFoundException("Пользователь с id " + userId + " не найден");
+        });
+        log.debug("Получен пользователь: {}", user);
+        return user;
     }
 
     @Override
     @Transactional
     public void delete(Long userId) {
-        log.info("Удаление пользователя....id={}", userId);
+        log.info("Попытка удаления пользователя по ID: {}", userId);
+
+        if (!userRepository.existsById(userId)) {
+            log.error("Пользователь с ID {} не найден и не может быть удален.", userId);
+            throw new NotFoundException("Пользователь с id " + userId + " не найден");
+        }
+
         userRepository.deleteById(userId);
-        log.info("Пользователь удалён");
+        log.info("Пользователь с ID {} успешно удален.", userId);
     }
 }
