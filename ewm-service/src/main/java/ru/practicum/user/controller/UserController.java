@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.user.dto.NewUserDto;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.service.UserService;
 
@@ -28,8 +29,8 @@ public class UserController {
 
     @PostMapping("/admin/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto add(@Valid @RequestBody UserDto userDto) {
-        return userService.add(userDto);
+    public UserDto add(@Valid @RequestBody NewUserDto newUserDto) {
+        return userService.add(newUserDto);
     }
 
     @DeleteMapping("/admin/users/{userId}")

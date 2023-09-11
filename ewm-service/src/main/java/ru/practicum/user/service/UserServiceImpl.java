@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
+import ru.practicum.user.dto.NewUserDto;
 import ru.practicum.user.dto.UserDto;
 import ru.practicum.user.dto.UserDtoMapper;
 import ru.practicum.user.model.User;
@@ -28,15 +29,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto add(UserDto userDto) {
-        log.info("Попытка создания пользователя: {}", userDto);
+    public UserDto add(NewUserDto newUserDto) {
+        log.info("Попытка создания пользователя: {}", newUserDto);
 
-        if (userRepository.countByName(userDto.getName()) > 0) {
-            log.error("Пользователь с именем '{}' уже существует.", userDto.getName());
+        if (userRepository.countByName(newUserDto.getName()) > 0) {
+            log.error("Пользователь с именем '{}' уже существует.", newUserDto.getName());
             throw new ConflictException("Пользователь уже существует");
         }
 
-        User user = UserDtoMapper.mapNewUserRequestToUser(userDto);
+        User user = UserDtoMapper.mapNewUserRequestToUser(newUserDto);
         log.debug("Создан пользователь: {}", user);
 
         User savedUser = userRepository.save(user);
