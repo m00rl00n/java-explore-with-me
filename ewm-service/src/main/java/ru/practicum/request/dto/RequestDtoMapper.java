@@ -1,8 +1,6 @@
 package ru.practicum.request.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Component;
 import ru.practicum.request.model.ParticipationRequest;
 
 @UtilityClass
