@@ -1,4 +1,5 @@
 package ru.practicum.comments.model;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.event.model.Event;

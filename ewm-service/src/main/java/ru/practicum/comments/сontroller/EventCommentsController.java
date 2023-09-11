@@ -21,8 +21,8 @@ public class EventCommentsController {
 
     @GetMapping
     public List<CommentDto> getByEvent(@PathVariable Long eventId,
-                                               @RequestParam(defaultValue = "0") Integer from,
-                                               @RequestParam(defaultValue = "10") Integer size) {
+                                       @RequestParam(defaultValue = "0") Integer from,
+                                       @RequestParam(defaultValue = "10") Integer size) {
         return commentService.getByEvent(eventId, from, size);
     }
 }

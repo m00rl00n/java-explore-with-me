@@ -3,7 +3,6 @@ package ru.practicum.comments.сontroller;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.comments.dto.CommentDto;
@@ -23,29 +22,29 @@ public class UserCommentsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDto add(@PathVariable Long userId,
-                                    @RequestParam Long eventId,
-                                    @Valid @RequestBody CommentDto newCommentDto) {
+                          @RequestParam Long eventId,
+                          @Valid @RequestBody CommentDto newCommentDto) {
         return commentService.add(userId, eventId, newCommentDto);
     }
 
     @GetMapping
     public List<CommentDto> getByUser(@PathVariable Long userId,
-                                              @RequestParam(defaultValue = "0") Integer from,
-                                              @RequestParam(defaultValue = "10") Integer size) {
+                                      @RequestParam(defaultValue = "0") Integer from,
+                                      @RequestParam(defaultValue = "10") Integer size) {
         return commentService.getByUser(userId, from, size);
     }
 
     @PatchMapping("/{commentId}")
     public CommentDto update(@PathVariable Long userId,
-                                    @PathVariable Long commentId,
-                                    @Valid @RequestBody CommentDto updateCommentDto) {
+                             @PathVariable Long commentId,
+                             @Valid @RequestBody CommentDto updateCommentDto) {
         return commentService.update(userId, commentId, updateCommentDto);
     }
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long userId,
-                              @PathVariable Long commentId) {
+                       @PathVariable Long commentId) {
         commentService.delete(userId, commentId);
     }
 }
