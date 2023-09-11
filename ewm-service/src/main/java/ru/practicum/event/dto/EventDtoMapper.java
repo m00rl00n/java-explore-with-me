@@ -20,7 +20,7 @@ public class EventDtoMapper {
         EventFullDto eventFullDto = new EventFullDto();
         eventFullDto.setId(event.getId());
         eventFullDto.setAnnotation(event.getAnnotation());
-        eventFullDto.setCategory(CategoryDtoMapper.mapCategoryToDto(event.getCategory()));
+        eventFullDto.setCategory(CategoryDtoMapper.toCategoryDto(event.getCategory()));
         eventFullDto.setConfirmedRequests(confirmed);
         eventFullDto.setCreatedOn(event.getCreatedOn().format(DateTimeFormatter.ofPattern(dateTimeFormat)));
         eventFullDto.setDescription(event.getDescription());
@@ -40,7 +40,7 @@ public class EventDtoMapper {
         EventShortDto eventShortDto = new EventShortDto();
         eventShortDto.setAnnotation(event.getAnnotation());
         eventShortDto.setTitle(event.getTitle());
-        eventShortDto.setCategory(CategoryDtoMapper.mapCategoryToDto(event.getCategory()));
+        eventShortDto.setCategory(CategoryDtoMapper.toCategoryDto(event.getCategory()));
         eventShortDto.setInitiator(UserDtoMapper.mapUserToShortDto(event.getInitiator()));
         eventShortDto.setId(event.getId());
         eventShortDto.setPaid(event.getPaid());
