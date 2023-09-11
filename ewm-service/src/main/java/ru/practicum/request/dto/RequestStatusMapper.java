@@ -1,12 +1,12 @@
 package ru.practicum.request.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@AllArgsConstructor
-@Component
+@UtilityClass
 public class RequestStatusMapper {
 
     public static RequestStatusUpdateResult mapToEventRequestStatusUpdateResult(List<ParticipationRequestDto> confirmedRequests,

@@ -38,9 +38,13 @@ public class RequestServiceImpl implements RequestService {
     public List<ParticipationRequestDto> getParticipationInvite(Long userId, Long eventId) {
         log.info("Запрос на получение информации о заявках пользователя {} на участие в событии {}", userId, eventId);
         List<ParticipationRequest> requests = getParticipationRequests(userId, eventId);
-        return requests.stream()
-                .map(requestDtoMapper::mapRequestToDto)
-                .collect(Collectors.toList());
+        List<ParticipationRequestDto> result = new ArrayList<>();
+
+        for (ParticipationRequest request : requests) {
+            result.add(requestDtoMapper.mapRequestToDto(request));
+        }
+
+        return result;
     }
 
     @Override
@@ -67,9 +71,14 @@ public class RequestServiceImpl implements RequestService {
     public List<ParticipationRequestDto> getRequestsByUserId(Long userId) {
         log.info("Запрос на получение информации о заявках пользователя {}", userId);
         User user = userService.getUserById(userId);
-        return requestRepository.findByUserId(userId).stream()
-                .map(requestDtoMapper::mapRequestToDto)
-                .collect(Collectors.toList());
+        List<ParticipationRequest> requests = requestRepository.findByUserId(userId);
+        List<ParticipationRequestDto> result = new ArrayList<>();
+
+        for (ParticipationRequest request : requests) {
+            result.add(requestDtoMapper.mapRequestToDto(request));
+        }
+
+        return result;
     }
 
     @Override
