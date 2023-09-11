@@ -1,4 +1,4 @@
-package ru.practicum.comments.сontroller;
+package ru.practicum.comments.controller;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
