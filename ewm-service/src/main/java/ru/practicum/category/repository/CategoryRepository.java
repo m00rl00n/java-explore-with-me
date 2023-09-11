@@ -6,9 +6,5 @@ import ru.practicum.category.model.Category;
 import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-    List<Category> findByName(String name);
-
-    Integer countByName(String name);
-
-    Boolean existsByName(String name);
+    Category findCategoriesByName(String name);
 }
