@@ -45,7 +45,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     @Transactional
-    public EventRequestStatusUpdateResult update(Long userId, Long eventId, EventRequestStatusUpdateRequest updateRequest) {
+    public RequestStatusUpdateResult update(Long userId, Long eventId, RequestStatusUpdate updateRequest) {
         log.info("Изменение статуса заявок на участие в событии пользователя {}", userId);
         Event event = getEventById(eventId);
         List<ParticipationRequest> requests = getParticipationRequestsByEventId(eventId);
@@ -60,7 +60,7 @@ public class RequestServiceImpl implements RequestService {
         }
 
         requestRepository.saveAll(updatedRequests);
-        return EventRequestStatusUpdateResultMapper.mapToEventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
+        return RequestStatusMapper.mapToEventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     private void updateRequestStatus(Long userId, Event event, ParticipationRequest request,
-                                     EventRequestStatusUpdateRequest updateRequest, Long confirmedRequestsCounter,
+                                     RequestStatusUpdate updateRequest, Long confirmedRequestsCounter,
                                      List<ParticipationRequest> updatedRequests, List<ParticipationRequestDto> confirmedRequests,
                                      List<ParticipationRequestDto> rejectedRequests) {
         if (isValidRequestStatusUpdate(request, updateRequest)) {
@@ -129,13 +129,12 @@ public class RequestServiceImpl implements RequestService {
             }
 
             updatedRequests.add(request);
-            confirmedRequestsCounter++;
         } else {
             throw new WrongDataException("Неверный статус");
         }
     }
 
-    private boolean isValidRequestStatusUpdate(ParticipationRequest request, EventRequestStatusUpdateRequest updateRequest) {
+    private boolean isValidRequestStatusUpdate(ParticipationRequest request, RequestStatusUpdate updateRequest) {
         return request.getStatus().equals("CONFIRMED") || request.getStatus().equals("REJECTED") || request.getStatus().equals("PENDING");
     }
 
