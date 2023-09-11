@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.dto.CategoryDtoMapper;
-import ru.practicum.category.dto.NewCategoryRequestDto;
+import ru.practicum.category.dto.NewCategoryDto;
 import ru.practicum.category.model.Category;
 import ru.practicum.category.repository.CategoryRepository;
 import ru.practicum.event.repository.EventRepository;
@@ -32,15 +32,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
-    public CategoryDto add(NewCategoryRequestDto newCategoryRequestDto) {
+    public CategoryDto add(NewCategoryDto newCategoryDto) {
         log.info("Добавление новой категории....");
-        String categoryName = newCategoryRequestDto.getName();
+        String categoryName = newCategoryDto.getName();
         if (categoryRepository.existsByName(categoryName)) {
             throw new ConflictException("Категория уже существует");
         }
-        Category category = categoryRepository.save(CategoryDtoMapper.mapNewDtoToCategory(newCategoryRequestDto));
+        Category category = categoryRepository.save(CategoryDtoMapper.toCategory(newCategoryDto));
         log.info("Категория сохранена ");
-        return CategoryDtoMapper.mapCategoryToDto(category);
+        return CategoryDtoMapper.toCategoryDto(category);
     }
 
     @Transactional
@@ -79,7 +79,7 @@ public class CategoryServiceImpl implements CategoryService {
             }
         }
         category.setName(categoryDto.getName());
-        return CategoryDtoMapper.mapCategoryToDto(categoryRepository.save(category));
+        return CategoryDtoMapper.toCategoryDto(categoryRepository.save(category));
     }
 
     @Override
@@ -88,17 +88,17 @@ public class CategoryServiceImpl implements CategoryService {
         List<Category> categories = categoryRepository.findAll(PageRequest.of(from / size, size)).getContent();
         List<CategoryDto> categoryDtos = new ArrayList<>();
         for (Category category : categories) {
-            categoryDtos.add(CategoryDtoMapper.mapCategoryToDto(category));
+            categoryDtos.add(CategoryDtoMapper.toCategoryDto(category));
         }
         return categoryDtos;
     }
 
     @Override
-    public CategoryDto getCategoryById(Long categoryId) {
+    public CategoryDto getById(Long categoryId) {
         log.info("Получение информации о категории, id = {}", categoryId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException("Категория не найдена"));
-        return CategoryDtoMapper.mapCategoryToDto(category);
+        return CategoryDtoMapper.toCategoryDto(category);
     }
 }
 

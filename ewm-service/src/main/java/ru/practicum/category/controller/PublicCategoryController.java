@@ -3,6 +3,7 @@ package ru.practicum.category.controller;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.category.dto.CategoryDto;
 import ru.practicum.category.service.CategoryService;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RestController
+@Validated
 @RequestMapping("/categories")
 public class PublicCategoryController {
 
@@ -24,7 +26,7 @@ public class PublicCategoryController {
     }
 
     @GetMapping("/{catId}")
-    public CategoryDto getCategoryById(@PathVariable Long catId) {
-        return categoryService.getCategoryById(catId);
+    public CategoryDto geById(@PathVariable Long catId) {
+        return categoryService.getById(catId);
     }
 }
