@@ -20,9 +20,9 @@ public class EventCommentsController {
     final CommentService commentService;
 
     @GetMapping
-    public List<CommentDto> getByEvent(@PathVariable Long eventId,
+    public List<CommentDto> getByEvent(@PathVariable Long id,
                                        @RequestParam(defaultValue = "0") Integer from,
                                        @RequestParam(defaultValue = "10") Integer size) {
-        return commentService.getByEvent(eventId, from, size);
+        return commentService.getByEvent(id, from, size);
     }
 }
