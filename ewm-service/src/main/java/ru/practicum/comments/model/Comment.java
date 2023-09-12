@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Comment {
     @Id
