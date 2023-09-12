@@ -1,6 +1,5 @@
 package ru.practicum.event.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.category.dto.CategoryDto;
@@ -20,7 +19,6 @@ public class EventShortDto {
     Long confirmedRequests;
     CategoryDto category;
     @NotNull
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
     UserShortDto initiator;
     Boolean paid;
