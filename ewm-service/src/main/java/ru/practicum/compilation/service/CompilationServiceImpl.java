@@ -39,57 +39,74 @@ public class CompilationServiceImpl implements CompilationService {
         List<Event> events = getEventsFromDto(compilationDto);
         Compilation compilation = createOrUpdateCompilation(compilationDto, events);
         CompilationDto result = compileDtoWithEvents(compilation);
+        log.info("Подборка успешно добавлена.");
         return result;
     }
 
     @Transactional
     @Override
-    public CompilationDto update(Long compId, UpdateCompilationRequest compilationDto) {
-        log.info("Обновление подборки, id={}", compId);
-        Compilation compilation = compilationRepository.findById(compId).orElseThrow(
-                () -> new NotFoundException("Подборка не существует " + compId));
+    public CompilationDto update(Long id, UpdateCompilationRequest compilationDto) {
+        log.info("Начало обновления подборки, id={}", id);
+
+        Compilation compilation = compilationRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Подборка не существует " + id));
 
         List<Event> events = getEventsFromDto(compilationDto);
         compilation.setEvents(events);
 
         if (compilationDto.getTitle() != null) {
             compilation.setTitle(compilationDto.getTitle());
+            log.info("Название подборки обновлено: '{}'", compilationDto.getTitle());
         }
+
         if (compilationDto.getPinned() != null) {
             compilation.setPinned(compilationDto.getPinned());
+            log.info("Статус 'pinned' обновлен: '{}'", compilationDto.getPinned());
         }
 
         compilation = createOrUpdateCompilation(compilation);
+
         CompilationDto result = compileDtoWithEvents(compilation);
+
+        log.info("Подборка успешно обновлена, id={}", id);
+        return result;
+    }
+
+    @Override
+    public List<CompilationDto> getAll(String pinned, Integer from, Integer size) {
+        log.info("Начало получения подборок событий");
+
+        List<Compilation> compilations = getCompilationsByPinned(pinned, from, size);
+        List<CompilationDto> compilationDtos = compileDtosWithEvents(compilations);
+
+        log.info("Получено {} подборок событий", compilations.size());
+        return compilationDtos;
+    }
+
+    @Override
+    public CompilationDto getCompilationById(Long id) {
+        log.info("Начало получения информации о подборке, id={}", id);
+
+        Compilation compilation = compilationRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Подборка не найдена " + id)
+        );
+        CompilationDto result = compileDtoWithEvents(compilation);
+
+        log.info("Получена информация о подборке, id={}", id);
         return result;
     }
 
     @Transactional
     @Override
-    public void delete(Long compId) {
-        log.info("Удаление подборки, id={}", compId);
-        Compilation compilation = compilationRepository.findById(compId).orElseThrow(
-                () -> new NotFoundException("Подборка не существует " + compId));
-        compilationRepository.deleteById(compId);
-        log.info("Подборка удалена " + compId);
-    }
+    public void delete(Long id) {
+        log.info("Начало удаления подборки, id={}", id);
 
-    @Override
-    public List<CompilationDto> getAll(String pinned, Integer from, Integer size) {
-        log.info("Получение подборок событий");
-        List<Compilation> compilations = getCompilationsByPinned(pinned, from, size);
-        List<CompilationDto> compilationDtos = compileDtosWithEvents(compilations);
-        return compilationDtos;
-    }
+        Compilation compilation = compilationRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Подборка не существует " + id));
 
-    @Override
-    public CompilationDto getCompilationById(Long compId) {
-        log.info("Получение информации о подборке, id={}", compId);
-        Compilation compilation = compilationRepository.findById(compId).orElseThrow(
-                () -> new NotFoundException("Подборка не найдена " + compId)
-        );
-        CompilationDto result = compileDtoWithEvents(compilation);
-        return result;
+        compilationRepository.deleteById(id);
+
+        log.info("Подборка успешно удалена, id={}", id);
     }
 
     private List<Event> getEventsFromDto(NewCompilationDto compilationDto) {

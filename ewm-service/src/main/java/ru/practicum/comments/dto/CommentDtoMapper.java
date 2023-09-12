@@ -7,7 +7,7 @@ import ru.practicum.user.dto.UserDtoMapper;
 
 public class CommentDtoMapper {
 
-    public static CommentDto mapCommentToDto(Comment comment) {
+    public static CommentDto toDto(Comment comment) {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
         commentDto.setText(comment.getText());
@@ -20,7 +20,7 @@ public class CommentDtoMapper {
         return commentDto;
     }
 
-    public static Comment mapDtoToComment(CommentDto dto) {
+    public static Comment toComment(CommentDto dto) {
         Comment comment = new Comment();
         comment.setText(dto.getText());
         comment.setCreated(dto.getCreated());
