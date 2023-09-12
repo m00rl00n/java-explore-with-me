@@ -18,17 +18,17 @@ public class AdminCommentsController {
 
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
-        commentService.deleteByAdmin(id);
+    public void delete(@PathVariable Long commentId) {
+        commentService.deleteByAdmin(commentId);
     }
 
     @PatchMapping("/{commentId}/approve")
-    public CommentDto approve(@PathVariable Long id) {
-        return commentService.approve(id);
+    public CommentDto approve(@PathVariable Long commentId) {
+        return commentService.approve(commentId);
     }
 
     @PatchMapping("/{commentId}/reject")
-    public CommentDto reject(@PathVariable Long id) {
-        return commentService.reject(id);
+    public CommentDto reject(@PathVariable Long commentId) {
+        return commentService.reject(commentId);
     }
 }

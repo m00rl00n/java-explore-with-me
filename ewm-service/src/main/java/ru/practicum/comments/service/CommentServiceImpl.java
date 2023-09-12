@@ -53,7 +53,7 @@ public class CommentServiceImpl implements CommentService {
         } else {
             throw new WrongDataException("Пользователь не был на событии, комментарий невозможно добавить.");
         }
-        return CommentDtoMapper.toDto(comment);
+        return CommentDtoMapper.mapCommentToDto(comment);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentRepository.findCommentsByEventIdAndStateOrderByCreatedDesc(eventId, "APPROVED", PageRequest.of(from / size, size));
         log.info("Найдено комментариев: " + comments.size());
         return comments.stream()
-                .map(CommentDtoMapper::toDto)
+                .map(CommentDtoMapper::mapCommentToDto)
                 .collect(Collectors.toList());
     }
 
@@ -72,7 +72,7 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentRepository.findCommentsByAuthorIdOrderByCreatedDesc(userId, PageRequest.of(from / size, size));
         log.info("Найдено комментариев: " + comments.size());
         return comments.stream()
-                .map(CommentDtoMapper::toDto)
+                .map(CommentDtoMapper::mapCommentToDto)
                 .collect(Collectors.toList());
     }
 
@@ -95,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
             throw new WrongDataException("Пользователь " + userId + " не является автором комментария. Изменение невозможно");
         }
         log.info("Комментарий обновлен" + commentId);
-        return CommentDtoMapper.toDto(comment);
+        return CommentDtoMapper.mapCommentToDto(comment);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new NotFoundException("Комментарй не найден " + commentId)
         );
-        return CommentDtoMapper.toDto(comment);
+        return CommentDtoMapper.mapCommentToDto(comment);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class CommentServiceImpl implements CommentService {
         );
         comment.setState("APPROVED");
         comment.setPublished(LocalDateTime.now());
-        return CommentDtoMapper.toDto(commentRepository.save(comment));
+        return CommentDtoMapper.mapCommentToDto(commentRepository.save(comment));
     }
 
     @Override
@@ -152,14 +152,14 @@ public class CommentServiceImpl implements CommentService {
                 () -> new NotFoundException("Комментарй не обнаружен " + commentId)
         );
         comment.setState("REJECTED");
-        return CommentDtoMapper.toDto(commentRepository.save(comment));
+        return CommentDtoMapper.mapCommentToDto(commentRepository.save(comment));
     }
 
     Comment getCommentFromDto(User user, Long eventId, CommentDto commentDto) {
         Event event = eventRepository.findById(eventId).orElseThrow(
                 () -> new NotFoundException("Эвент не найден  " + eventId)
         );
-        Comment comment = CommentDtoMapper.toComment(commentDto);
+        Comment comment = CommentDtoMapper.mapDtoToComment(commentDto);
         comment.setAuthor(user);
         comment.setEvent(event);
         return comment;
