@@ -1,5 +1,6 @@
 package ru.practicum.event.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.category.model.Category;
@@ -33,12 +34,14 @@ public class Event {
     Category category;
 
     @Column(name = "created_on")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdOn;
 
     @Column(length = 7000)
     String description;
 
     @Column(nullable = false, name = "event_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
 
     @ManyToOne(optional = false)
@@ -54,6 +57,7 @@ public class Event {
     Integer participantLimit;
 
     @Column(name = "published_on")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime publishedOn;
 
     @Column(name = "request_moderation")

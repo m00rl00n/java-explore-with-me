@@ -1,5 +1,6 @@
 package ru.practicum.comments.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.event.model.Event;
@@ -30,11 +31,12 @@ public class Comment {
     User author;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime created;
 
     String state;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime published;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime updated;
 }

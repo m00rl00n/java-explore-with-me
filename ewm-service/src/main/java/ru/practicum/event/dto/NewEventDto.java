@@ -1,5 +1,6 @@
 package ru.practicum.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import ru.practicum.event.model.Location;
@@ -23,7 +24,7 @@ public class NewEventDto {
     @NotBlank
     @Size(min = 20)
     String description;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime eventDate;
     Location location;
 
