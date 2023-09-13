@@ -8,7 +8,7 @@ import ru.practicum.user.model.User;
 @AllArgsConstructor
 public class UserDtoMapper {
 
-    public static UserDto mapUserToDto(User user) {
+    public static UserDto toDto(User user) {
         return new UserDto(
                 user.getId(),
                 user.getEmail(),
@@ -16,7 +16,7 @@ public class UserDtoMapper {
         );
     }
 
-    public static UserShortDto mapUserToShortDto(User user) {
+    public static UserShortDto toShortDto(User user) {
         if (user.getId() == null) {
             return new UserShortDto(null, user.getName());
         }
@@ -31,11 +31,4 @@ public class UserDtoMapper {
         );
     }
 
-    public User mapDtoToUser(UserDto userDto) {
-        return new User(
-                userDto.getId(),
-                userDto.getEmail(),
-                userDto.getName()
-        );
-    }
 }

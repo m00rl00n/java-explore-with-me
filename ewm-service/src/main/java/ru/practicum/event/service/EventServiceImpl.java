@@ -47,92 +47,129 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto add(Long userId, NewEventDto newEvent) {
-        log.info("Добавление нового события пользователем {}", userId);
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
-        Category category = categoryRepository.findById(newEvent.getCategory()).orElseThrow(
-                () -> new NotFoundException("Категория отсутствует " + newEvent.getCategory())
-        );
+    public EventFullDto add(Long id, NewEventDto newEvent) {
+        log.info("Попытка добавления нового события пользователем с идентификатором: {}", id);
+        try {
+            log.debug("Ищем пользователя по идентификатору: {}", id);
+            User user = userRepository.findById(id).orElseThrow(
+                    () -> new NotFoundException("Пользователь с id " + id + " не найден")
+            );
 
-        Event event = EventDtoMapper.mapNewEventDtoToEvent(newEvent, category);
-        saveLocation(event);
-        event.setInitiator(user);
-        event.setCreatedOn(LocalDateTime.now());
-        event.setState(EventState.PENDING);
-        Long confirmedRequests = requestRepository.countByEventAndStatuses(event.getId(), List.of("CONFIRMED"));
-        if (event.getPaid() == null) {
-            event.setPaid(false);
+            log.debug("Ищем категорию события по идентификатору: {}", newEvent.getCategory());
+            Category category = categoryRepository.findById(newEvent.getCategory()).orElseThrow(
+                    () -> new NotFoundException("Категория отсутствует " + newEvent.getCategory())
+            );
+
+            log.debug("Создаем новое событие на основе переданных данных");
+            Event event = EventDtoMapper.mapNewEventDtoToEvent(newEvent, category);
+            saveLocation(event);
+            event.setInitiator(user);
+            event.setCreatedOn(LocalDateTime.now());
+            event.setState(EventState.PENDING);
+            Long confirmedRequests = requestRepository.countByEventAndStatuses(event.getId(), List.of("CONFIRMED"));
+
+            if (event.getPaid() == null) {
+                event.setPaid(false);
+            }
+            if (event.getParticipantLimit() == null) {
+                event.setParticipantLimit(0);
+            }
+            if (event.getRequestModeration() == null) {
+                event.setRequestModeration(true);
+            }
+
+            if (LocalDateTime.now().isAfter(event.getEventDate().minus(2, ChronoUnit.HOURS))) {
+                log.warn("Событие с id {} не может быть добавлено, так как до его начала осталось меньше часа", event.getId());
+                throw new WrongDataException("До начала события меньше часа, добавление невозможно");
+            }
+
+            log.debug("Сохраняем событие в репозитории");
+            event = eventRepository.save(event);
+            log.info("Событие успешно сохранено с идентификатором: {}", event.getId());
+
+            log.debug("Формируем EventFullDto для созданного события");
+            EventFullDto eventFullDto = EventDtoMapper.mapEventToFullDto(event, confirmedRequests);
+            return eventFullDto;
+        } catch (NotFoundException e) {
+            log.error("Ошибка при добавлении события: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Ошибка при добавлении события: {}", e.getMessage());
+            throw new RuntimeException("Ошибка при добавлении события", e);
         }
-        if (event.getParticipantLimit() == null) {
-            event.setParticipantLimit(0);
-        }
-        if (event.getRequestModeration() == null) {
-            event.setRequestModeration(true);
-        }
-        if (LocalDateTime.now().isAfter(event.getEventDate().minus(2, ChronoUnit.HOURS))) {
-            throw new WrongDataException("До начала события меньше часа, изменение невозможно");
-        }
-        event = eventRepository.save(event);
-        log.info("Событие сохранено " + event.getId());
-        EventFullDto eventFullDto = EventDtoMapper.mapEventToFullDto(event, confirmedRequests);
-        return eventFullDto;
     }
 
     @Override
     public List<EventFullDto> get(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
-        log.info("Поиск событий");
-        LocalDateTime rangeStartDateTime = null;
-        LocalDateTime rangeEndDateTime = null;
-        if (rangeStart != null) {
-            rangeStartDateTime = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        }
-        if (rangeEnd != null) {
-            rangeEndDateTime = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-            if (rangeStartDateTime.isAfter(rangeEndDateTime)) {
-                throw new WrongDataException("Дата и время начала поиска не должна быть позже даты и времени конца поиска");
-            }
-        }
-        List<EventState> eventStateList;
-        if (states != null) {
-            eventStateList = states.stream().map(EventState::valueOf).collect(Collectors.toList());
-        } else {
-            eventStateList = Arrays.stream(EventState.values()).collect(Collectors.toList());
-        }
-        List<EventFullDto> dtos;
+        log.info("Поиск событий начат");
+        try {
+            LocalDateTime rangeStartDateTime = null;
+            LocalDateTime rangeEndDateTime = null;
 
-        if (users == null && categories == null) {
-            ArrayList<Event> events = new ArrayList<>(eventRepository.findAll(PageRequest.of(from / size, size)).getContent());
-            List<ParticipationRequest> requestsByEventIds = requestRepository.findByEventIds(events.stream()
-                    .mapToLong(e -> e.getId()).boxed().collect(Collectors.toList()));
-            dtos = events.stream()
-                    .map(e -> EventDtoMapper.mapEventToFullDto(e,
-                            requestsByEventIds.stream()
-                                    .filter(r -> r.getEvent().getId().equals(e.getId()))
-                                    .count()))
-                    .collect(Collectors.toList());
-        } else {
-            List<Event> allEventsWithDates = new ArrayList<>(eventRepository.findAllEventsWithDates(users,
-                    eventStateList, categories, rangeStartDateTime, rangeEndDateTime, PageRequest.of(from / size, size)));
-            List<ParticipationRequest> requestsByEventIds = requestRepository.findByEventIds(allEventsWithDates.stream()
-                    .mapToLong(e -> e.getId()).boxed().collect(Collectors.toList()));
-            dtos = allEventsWithDates.stream()
-                    .map(e -> EventDtoMapper.mapEventToFullDto(e,
-                            requestsByEventIds.stream()
-                                    .filter(r -> r.getEvent().getId().equals(e.getId()))
-                                    .count()))
-                    .collect(Collectors.toList());
+            if (rangeStart != null) {
+                rangeStartDateTime = LocalDateTime.parse(rangeStart, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            }
+            if (rangeEnd != null) {
+                rangeEndDateTime = LocalDateTime.parse(rangeEnd, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                if (rangeStartDateTime.isAfter(rangeEndDateTime)) {
+                    log.error("Ошибка при поиске событий: дата и время начала поиска не должны быть позже даты и времени конца поиска");
+                    throw new WrongDataException("Дата и время начала поиска не должны быть позже даты и времени конца поиска");
+                }
+            }
+
+            List<EventState> eventStateList;
+            if (states != null) {
+                eventStateList = states.stream().map(EventState::valueOf).collect(Collectors.toList());
+            } else {
+                eventStateList = Arrays.stream(EventState.values()).collect(Collectors.toList());
+            }
+            List<EventFullDto> dtos;
+
+            if (users == null && categories == null) {
+                log.debug("Получение всех событий с использованием пагинации. from={}, size={}", from, size);
+                ArrayList<Event> events = new ArrayList<>(eventRepository.findAll(PageRequest.of(from / size, size)).getContent());
+                List<ParticipationRequest> requestsByEventIds = requestRepository.findByEventIds(events.stream()
+                        .mapToLong(e -> e.getId()).boxed().collect(Collectors.toList()));
+                dtos = events.stream()
+                        .map(e -> EventDtoMapper.mapEventToFullDto(e,
+                                requestsByEventIds.stream()
+                                        .filter(r -> r.getEvent().getId().equals(e.getId()))
+                                        .count()))
+                        .collect(Collectors.toList());
+            } else {
+                log.debug("Поиск событий с фильтрами. Параметры: users={}, states={}, categories={}, rangeStart={}, rangeEnd={}, from={}, size={}",
+                        users, states, categories, rangeStart, rangeEnd, from, size);
+                List<Event> allEventsWithDates = new ArrayList<>(eventRepository.findAllEventsWithDates(users,
+                        eventStateList, categories, rangeStartDateTime, rangeEndDateTime, PageRequest.of(from / size, size)));
+                List<ParticipationRequest> requestsByEventIds = requestRepository.findByEventIds(allEventsWithDates.stream()
+                        .mapToLong(e -> e.getId()).boxed().collect(Collectors.toList()));
+                dtos = allEventsWithDates.stream()
+                        .map(e -> EventDtoMapper.mapEventToFullDto(e,
+                                requestsByEventIds.stream()
+                                        .filter(r -> r.getEvent().getId().equals(e.getId()))
+                                        .count()))
+                        .collect(Collectors.toList());
+            }
+
+            log.debug("Получено {} событий", dtos.size());
+
+            log.debug("Расчет количества просмотров и заявок для каждого события");
+            dtos = getViewCounters(dtos);
+
+            log.info("Поиск событий завершен");
+            return dtos;
+        } catch (Exception e) {
+            log.error("Ошибка при поиске событий: {}", e.getMessage());
+            throw e;
         }
-        dtos = getViewCounters(dtos);
-        return dtos;
     }
 
     @Override
     @Transactional
-    public EventFullDto update(Long eventId, UpdateEventAdminRequest updateRequest) {
+    public EventFullDto update(Long id, UpdateEventAdminRequest updateRequest) {
         log.info("Редактирование данных события и его статуса");
-        Event event = eventRepository.findById(eventId).orElseThrow(
-                () -> new NotFoundException("Событие не существует " + eventId));
+        Event event = eventRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Событие не существует " + id));
 
         if (LocalDateTime.now().isAfter(event.getEventDate().minus(2, ChronoUnit.HOURS))) {
             throw new ConflictException("До начала события меньше часа, изменение события невозможно");
@@ -155,13 +192,26 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getEventsByUser(Long userId, Integer from, Integer size) {
-        log.info("Получение событий, добавленных пользователем {}", userId);
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new NotFoundException("Пользователь с id " + userId + " не найден"));
-        return eventRepository.findAllByInitiator(user, PageRequest.of(from / size, size)).stream()
-                .map(EventDtoMapper::mapEventToShortDto)
-                .collect(Collectors.toList());
+    public List<EventShortDto> getEventsByUser(Long id, Integer from, Integer size) {
+        log.info("Получение событий, добавленных пользователем {}", id);
+        try {
+            User user = userRepository.findById(id).orElseThrow(
+                    () -> new NotFoundException("Пользователь с id " + id + " не найден"));
+
+            log.debug("Получение событий пользователя с id={} с использованием пагинации. from={}, size={}", id, from, size);
+            List<Event> userEvents = eventRepository.findAllByInitiator(user, PageRequest.of(from / size, size));
+
+            log.debug("Получено {} событий пользователя с id={}", userEvents.size(), id);
+
+            log.info("Получение событий, добавленных пользователем {} завершено", id);
+
+            return userEvents.stream()
+                    .map(EventDtoMapper::mapEventToShortDto)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            log.error("Ошибка при получении событий пользователя {}: {}", id, e.getMessage());
+            throw e;
+        }
     }
 
     @Override

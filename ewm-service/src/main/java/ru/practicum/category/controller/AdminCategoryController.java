@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.category.dto.CategoryDto;
-import ru.practicum.category.dto.NewCategoryRequestDto;
 import ru.practicum.category.service.CategoryService;
 
 import javax.validation.Valid;
@@ -21,7 +20,7 @@ public class AdminCategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto add(@Valid @RequestBody NewCategoryRequestDto categoryDto) {
+    public CategoryDto add(@Valid @RequestBody CategoryDto categoryDto) {
         return categoryService.add(categoryDto);
     }
 

@@ -7,7 +7,7 @@ import ru.practicum.category.model.Category;
 @UtilityClass
 public class CategoryDtoMapper {
 
-    public static Category mapNewDtoToCategory(NewCategoryRequestDto categoryDto) {
+    public static Category mapNewDtoToCategory(CategoryDto categoryDto) {
         Category category = new Category();
         category.setId(null);
         category.setName(categoryDto.getName());
